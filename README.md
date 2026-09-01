@@ -1,5 +1,10 @@
 # COP4331-LAMP-Contacts-Manager
 
+## Important Notes / Links
+
+- Remember to commit often, generally after a new feature is added.
+- Link to the shared [PowerPoint Presentation](https://ucf-my.sharepoint.com/:p:/r/personal/ca554842_ucf_edu/_layouts/15/Doc.aspx?sourcedoc=%7B652D69EF-0E83-46AB-8712-69D4793B8495%7D&file=COP4331LampStackPresentation.pptx&action=edit&mobileredirect=true&wdOrigin=OUTLOOK-METAOS.FILEBROWSER)
+
 ## Project Overview
 
 You will need a project title, your GitHub link, and an application link. <br>
