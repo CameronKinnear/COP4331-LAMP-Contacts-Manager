@@ -1,5 +1,8 @@
 # COP4331-LAMP-Contacts-Manager
 
+## Group Members
+- Cameron Kinnear
+
 ## Important Notes / Links
 
 - Remember to commit often, generally after a new feature is added.
