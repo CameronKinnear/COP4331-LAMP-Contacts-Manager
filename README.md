@@ -3,6 +3,7 @@
 ## Group Members
 - Cameron Kinnear
 - Guilherme Oliveira
+- Lili Alvarado
 
 ## Important Notes / Links
 
