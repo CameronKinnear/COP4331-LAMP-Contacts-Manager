@@ -32,7 +32,6 @@ The slides must be professional and start with a title page followed by a member
 There are rare cases when UCF IT blocks your domain. Check it on the campus network two days and then one day before your presentation. They can open it up, but it usually takes a day or two.
 
 
-
 ## Project Requirements:
 
 - Remote database
