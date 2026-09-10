@@ -2,6 +2,7 @@
 
 ## Group Members
 - Cameron Kinnear
+- Guilherme Oliveira
 
 ## Important Notes / Links
 
