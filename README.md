@@ -4,6 +4,7 @@
 - Cameron Kinnear
 - Guilherme Oliveira
 - Lili Alvarado
+- Teresa Scavotto
 
 ## Important Notes / Links
 
