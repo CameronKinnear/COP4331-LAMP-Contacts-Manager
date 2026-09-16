@@ -1,0 +1,17 @@
+.flex-center {
+    display: flex;
+    justify-self: center;
+}
+
+.block-center {
+    display: block;
+    justify-self: center;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-large {
+    font-size: 30px;
+}
