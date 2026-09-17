@@ -1,5 +1,37 @@
+<!DOCTYPE html>
 <html>
-    <body>
-        <p>HELLO WORLD!!</p>
-    </body>
+<head>
+    <link rel="stylesheet" href="style/basic_style.css">
+    <link rel="stylesheet" href="style/index_style.css">
+
+    <script src="scripts/login.js" defer></script>
+</head>
+<body>
+    <div id="login-box" class="block-center">
+
+        <!-- Login Form-->
+        <form id="login-form" onsubmit="event.preventDefault(); AttemptLogin();">
+
+            <!-- Login Username -->
+            <div id="login-username-box" class="login-form-box">
+                <label id="username-label" class="text-large">Username</label> <br>
+                <input type="text" id="login-username-input" value="" class="login-input" placeholder="Enter Username">
+            </div>
+
+            <!-- Login Password-->
+            <div id="login-password-box" class="login-form-box">
+                <label id="password-label" class="text-large">Password</label> <br>
+                <input type="password" id="login-password-input" value="" class="login-input" placeholder="Enter Password">
+            </div>
+
+            <!-- Login Button -->
+            <button type="submit" id="login-button" class="login-form-box flex-center">
+                <span id="button-text" class="text-center">Sign In</span>
+            </button>
+            <div id="login-result"></div>
+        </form>
+
+    </div>
+
+</body>
 </html>
