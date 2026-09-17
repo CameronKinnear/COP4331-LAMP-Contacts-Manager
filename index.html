@@ -3,12 +3,14 @@
 <head>
     <link rel="stylesheet" href="style/basic_style.css">
     <link rel="stylesheet" href="style/index_style.css">
+
+    <script src="scripts/login.js" defer></script>
 </head>
 <body>
     <div id="login-box" class="block-center">
 
         <!-- Login Form-->
-        <form id="login-form">
+        <form id="login-form" onsubmit="event.preventDefault(); AttemptLogin();">
 
             <!-- Login Username -->
             <div id="login-username-box" class="login-form-box">
@@ -29,5 +31,6 @@
         </form>
 
     </div>
+
 </body>
 </html>
