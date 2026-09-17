@@ -1,5 +1,11 @@
 # COP4331-LAMP-Contacts-Manager
 
+## Group Members
+- Cameron Kinnear
+- Guilherme Oliveira
+- Lili Alvarado
+- Teresa Scavotto
+
 ## Important Notes / Links
 
 - Remember to commit often, generally after a new feature is added.
@@ -26,7 +32,6 @@ You may not show the web app from a local instance--it must be on a remote serve
 You are also required to use a remote hosting service such as Digital Ocean. <br>
 The slides must be professional and start with a title page followed by a members page. Then you should explain what the project is, how it was developed, and anything that you feel is important. Gantt chart, UML and/or ER diagrams are required. Talk about what went well and what did not go well. Give a demo of the application. Leave time for questions and have a questions page. <br>
 There are rare cases when UCF IT blocks your domain. Check it on the campus network two days and then one day before your presentation. They can open it up, but it usually takes a day or two.
-
 
 
 ## Project Requirements:
