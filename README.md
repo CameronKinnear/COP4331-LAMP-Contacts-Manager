@@ -5,6 +5,7 @@
 - Guilherme Oliveira
 - Lili Alvarado
 - Teresa Scavotto
+- Luna Fuller
 
 ## Important Notes / Links
 
