@@ -36,11 +36,11 @@ if ($method === 'POST') {
             respond(400, ['error' => 'Login and password are required']);
         }
 
-        $stmt = $db->prepare('SELECT ID, firstName, lastName FROM Users WHERE Login = :login AND Password = :pass LIMIT 1');
-        $stmt->execute([':login' => $login, ':pass' => $password]);
+        $stmt = $db->prepare('SELECT ID, firstName, lastName FROM Users WHERE Login = :login AND LIMIT 1');
+        $stmt->execute([':login' => $login]);
         $user = $stmt->fetch();
 
-        if ($user) {
+        if ($user && password_verify($password, $user['Password'])) {
             respond(200, [
                 'id'        => (int) $user['ID'],
                 'firstName' => $user['firstName'],
