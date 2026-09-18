@@ -16,9 +16,9 @@ if ($method === 'POST' && isset($body['register'])) {
 	}
 
 	$hash = password_hash($password, PASSWORD_DEFAULT);
-	$stmt = $db->prepare('INSERT INTO Users (Login, Password, firstName, lastName) VALUES (:login, :pass, :first, :last)');
-	$stmt->execute([':login' => $login, ':pass' => $hash, ':first' => $first, ':last' => $last]);
 
+	$stmt = $db->prepare('SELECT ID, firstName, lastName, Password FROM Users WHERE Login = :login LIMIT 1');
+	$stmt->execute([':login' => $login]);	
 	respond(201, ['message' => 'User registered successfully']);
 }		
 ?>
