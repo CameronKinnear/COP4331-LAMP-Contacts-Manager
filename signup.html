@@ -6,29 +6,51 @@
   <title>Sign Up - BrownBook</title>
   <link rel="icon" type="image/png" href="brownbook_logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="styles.css"/>
+
+  <link rel="stylesheet" href="style/basic_style.css">
+  <link rel="stylesheet" href="style/signup.css">
 </head>
 <body>
+
+  <!-- Header content (logo, name, etc.)-->
   <header>
     <div class="header-content">
-      <img src="brownbook_logo.png" alt="BrownBook Logo" class="logo">
+      <img src="images/brownbook_logo.png" alt="BrownBook Logo" class="logo">
       <h1>BrownBook</h1>
     </div>
   </header>
 
   <main>
-    <div class="card" style="max-width:400px; margin:40px auto; text-align:center;">
+    <!-- Create an Account Form and Div -->
+    <div id="signup-box" class="block-center">
       <h2>Create an Account</h2>
       <form id="signup-form" class="login-form">
-        <input type="text" name="firstName" placeholder="First Name" required/>
-        <input type="text" name="lastName" placeholder="Last Name" required/>
-        <input type="text" name="username" placeholder="Username" required/>
-        <input type="password" name="password" placeholder="Password" required/>
-        <button type="submit" class="login-btn">Register</button>
+        <div class="signup-form-box">
+          <div class="inner-signup-form-box">
+            <label class="text-medium">First Name</label> <br>
+            <input type="text" name="firstName" placeholder="First Name" required class="signup-input">
+          </div>
+          <div class="inner-signup-form-box">
+            <label class="text-medium">Last Name</label> <br>
+            <input type="text" name="lastName" placeholder="Last Name" required class="signup-input">
+          </div>
+        </div>
+        <div class="signup-form-box">
+          <div class="inner-signup-form-box">
+            <label class="text-medium">Username</label> <br>
+            <input type="text" name="username" placeholder="Username" required class="signup-input"> <br>
+          </div>
+          <div class="inner-signup-form-box">
+            <label class="text-medium">Password</label> <br>
+            <input type="password" name="password" placeholder="Password" required class="signup-input"> <br>
+          </div>
+        </div>
+        <div id="login-page-buttons" class="flex-center">
+          <button type="submit" class="login-btn">Register</button>
+          <button onclick="window.location.href='index.html'" class="signup-btn">Return to Login</button>
+        </div>
       </form>
       <br/>
-      <button onclick="window.location.href='index.html'" class="signup-btn">Login Here</button>
-      <button onclick="window.location.href='index.html'" class="signup-btn">Home</button>
     </div>
   </main>
 

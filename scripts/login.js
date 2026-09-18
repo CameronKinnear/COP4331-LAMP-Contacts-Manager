@@ -15,9 +15,6 @@ function AttemptLogin() {
     let jsonPayload = JSON.stringify({username: username, password: password});
     
     // Set up HTTPS request
-    let xhr = XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
     try {
     /*
         User API to request and parse with the gathered info

@@ -1,0 +1,36 @@
+#signup-box {
+    border: 2px solid black;
+    min-width: 300px;
+    max-width: 35%;
+    padding: 5%;
+    margin-top: 100px;
+}
+
+.signup-form-box {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.inner-signup-form-box {
+    flex-direction: column;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+h2 {
+    font-size: 35px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-page-buttons {
+    width: 100%;
+}
+
+button {
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 150px;
+}
