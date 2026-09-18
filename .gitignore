@@ -1,0 +1,19 @@
+# Secrets
+.env
+*.env.local
+setup.sql
+
+#deployment artifacts
+*.zip
+
+# OS stuff
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# logs and future dependency dir.
+*.log
+vendor/
+node_modules/
