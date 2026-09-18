@@ -22,8 +22,7 @@ CREATE TABLE `Users` (
     `FirstName` VARCHAR(50) NOT NULL DEFAULT '',
     `LastName` VARCHAR(50) NOT NULL DEFAULT '',
     `Login` VARCHAR(50) NOT NULL DEFAULT '',
-    `Password` VARCHAR(50) NOT NULL DEFAULT '',
-    PRIMARY KEY (`ID`),
+    `Password` VARCHAR(255) NOT NULL DEFAULT '',    PRIMARY KEY (`ID`),
     INDEX `idx_users_login` (`Login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
