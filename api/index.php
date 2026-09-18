@@ -19,44 +19,36 @@ setCORSHeaders();
 
 $method = $_SERVER['REQUEST_METHOD'];
 $db     = getDB();
+$body   = getRequestBody();
 
 // 1. Unauthenticated Health Check (Ping)
 if ($method === 'GET' && (isset($_GET['ping']) || (isset($_GET['action']) && $_GET['action'] === 'ping'))) {
     respond(200, ['status' => 'OK', 'timestamp' => time()]);
 }
 
-// 2. Unauthenticated Login (POST with login & password in body)
 if ($method === 'POST') {
-    $body = getRequestBody();
-    if (isset($body['login']) && isset($body['password'])) {
-        $login    = clean($body['login']);
-        $password = clean($body['password']);
+    $login    = clean($body['login'] ?? '');
+    $password = clean($body['password'] ?? '');
+    $first    = clean($body['firstName'] ?? '');
+    $last     = clean($body['lastName'] ?? '');
 
-        if (!$login || !$password) {
-            respond(400, ['error' => 'Login and password are required']);
-        }
-
-        $stmt = $db->prepare('SELECT ID, firstName, lastName FROM Users WHERE Login = :login AND LIMIT 1');
-        $stmt->execute([':login' => $login]);
-        $user = $stmt->fetch();
-
-        if ($user && password_verify($password, $user['Password'])) {
-            respond(200, [
-                'id'        => (int) $user['ID'],
-                'firstName' => $user['firstName'],
-                'lastName'  => $user['lastName'],
-                'token'     => (string) $user['ID'],
-                'error'     => ''
-            ]);
-        } else {
-            respond(401, [
-                'id'        => 0,
-                'firstName' => '',
-                'lastName'  => '',
-                'error'     => 'No Records Found'
-            ]);
-        }
+    if (!$login || !$password) {
+        respond(400, ['error' => 'Login and password are required.']);
     }
+
+    $check = $db->prepare('SELECT ID FROM Users WHERE Login = :login LIMIT 1');
+    $check->execute([':login' => $login]);
+    if ($check->fetch()) {
+        respond(409, ['error' => 'Username already taken.']);
+    }
+
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $stmt = $db->prepare('INSERT INTO Users (Login, Password, firstName, lastName) VALUES (:login, :pass, :first, :last)');
+    $stmt->execute([':login' => $login, ':pass' => $hash, ':first' => $first, ':last' => $last]);
+
+    respond(201, ['message' => 'User registered successfully']);
+} else {
+    respond(405, ['error' => 'Method not allowed']);
 }
 
 // 3. All other routes require an authenticated user
