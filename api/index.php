@@ -27,30 +27,6 @@ if ($method === 'GET' && (isset($_GET['ping']) || (isset($_GET['action']) && $_G
 }
 
 if ($method === 'POST') {
-    $login    = clean($body['login'] ?? '');
-    $password = clean($body['password'] ?? '');
-    $first    = clean($body['firstName'] ?? '');
-    $last     = clean($body['lastName'] ?? '');
-
-    if (!$login || !$password) {
-        respond(400, ['error' => 'Login and password are required.']);
-    }
-
-    $check = $db->prepare('SELECT ID FROM Users WHERE Login = :login LIMIT 1');
-    $check->execute([':login' => $login]);
-    if ($check->fetch()) {
-        respond(409, ['error' => 'Username already taken.']);
-    }
-
-    $hash = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = $db->prepare('INSERT INTO Users (Login, Password, firstName, lastName) VALUES (:login, :pass, :first, :last)');
-    $stmt->execute([':login' => $login, ':pass' => $hash, ':first' => $first, ':last' => $last]);
-
-    respond(201, ['message' => 'User registered successfully']);
-} else {
-    respond(405, ['error' => 'Method not allowed']);
-}
-
     // 2b. Registration
     if (isset($body['register']) && $body['register']) {
         $login = clean($body['login']);
