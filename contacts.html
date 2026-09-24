@@ -15,13 +15,14 @@
                 <div id="search-bar-divider"></div>
                 <!-- Where the selectable contacts are diplayed for selection -->
                 <div id="contacts-display">
-                    <button id="contact-1" class="contact-element">
+                    <button class="contact-element" onclick="DisplaySelectedContact(this)">
                         <div class="contact-left">
-                            <img src="images/placeholder_user.png" class="user-icon">
+                            <img src="images/placeholder_user.png" class="contact-icon">
                         </div>
                         <div class="contact-right">
                             <div class="contact-top">
-                                <label class="contact-name">Placeholder Name</label>
+                                <label class="contact-first-name">Placeholder</label>
+                                <label class="contact-last-name">Name</label>
                             </div>
                             <div class="contact-bot">
                                 <label class="contact-phone">123-456-7890</label>
@@ -35,7 +36,13 @@
 
                 <!-- The header of the selected contact (image, name, basic info)-->
                 <div id="selected-contact-header">
-                    <img id="selected-contact-img">
+                    <div id="selected-contact-header-left">
+                        <img id="selected-contact-img">
+                    </div>
+                    <div id="selected-contact-header-right">
+
+                    </div>
+                    
 
                 </div>
 
@@ -45,5 +52,7 @@
                 </div>
             </div>
         </div>
+
+        <script src="scripts/contacts_handler.js" defer></script>
     </body>
 </html>

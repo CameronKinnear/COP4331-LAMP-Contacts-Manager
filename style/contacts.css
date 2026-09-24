@@ -50,7 +50,7 @@
     display: flex;
 }
 
-.user-icon {
+.contact-icon {
     height: 95%;
 }
 
@@ -77,4 +77,8 @@
     flex-direction: row;
     height: 50%;
     align-items: center;
+}
+
+.contact-first-name {
+    margin-right: 2px;
 }
