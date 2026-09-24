@@ -1,3 +1,4 @@
+isContactSelected = false;
 
 function AddContact() {
 
@@ -16,6 +17,8 @@ function DisplaySelectedContact(parent) {
     contactImage.src = image.src;
     contactfName.innerHTML = firstName.innerHTML
     contactlName.innerHTML = lastName.innerHTML
+    addWidgetContainer.classList.remove('hidden');
+    isContactSelected = true;
 }
 
 function GetChildren(self) {
@@ -29,6 +32,11 @@ function AddWidgetToContact(widget) {
 }
 
 function GetWidgetForContact(draggableWidgetId) {
+
+    if (isContactSelected == false) {
+        console.log("Contact is not selected");
+        return null;
+    }
     if (draggableWidgetId == 'widget-note') {
         console.log("Note Widget Added");
     }

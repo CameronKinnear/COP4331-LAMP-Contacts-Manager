@@ -10,6 +10,7 @@
 }
 
 #drag-widget-here-to-add {
+    margin-top: 50px;
     display: flex;
     border: 5px dotted black;
     width: 80%;
@@ -35,7 +36,6 @@
     margin-left: 50px;
     height: 150px;
     width: 200px;
-    background-color: gray;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -43,7 +43,7 @@
 
 
 .widget-label {
-    margin-top: auto;
+    margin-top: 5px;
 }
 
 #widget-note {
@@ -51,6 +51,7 @@
     margin-top: 5%;
     width: 80%;
     height: 80%;
+    border: 1px solid black;
 }
 
 .draggable-widget:hover {
