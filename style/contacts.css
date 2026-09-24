@@ -1,0 +1,80 @@
+#main-logo {
+    width: 50px;
+    height: 50px;
+}
+
+#logo{
+    display: flex;
+    flex-direction: row;
+}
+
+#contacts-column {
+    border: 2px solid black;
+    height: 100%;
+    width: 33%;
+}
+
+#selected-contact-column {
+    border: 2px solid black;
+    height: 100%;
+    width: 66%;
+}
+
+#main-content {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+#search-bar-divider {
+    width: 95%;
+    margin-left: 2.5%;
+    background-color: black;
+    height: 1px;
+    margin-top: 5px;
+}
+
+#contact-search-bar {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 10px;
+}
+
+.contact-element {
+    height: 50px;
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: flex;
+}
+
+.user-icon {
+    height: 95%;
+}
+
+.contact-left {
+    display: inherit;
+    flex-direction: column; 
+}
+
+.contact-right {
+    padding-left: 5px;
+    display: inherit;
+    flex-direction: column;
+}
+
+.contact-top {
+    display: inherit;
+    flex-direction: row;
+    height: 50%;
+    align-items: center;
+}
+
+.contact-bot {
+    display: inherit;
+    flex-direction: row;
+    height: 50%;
+    align-items: center;
+}

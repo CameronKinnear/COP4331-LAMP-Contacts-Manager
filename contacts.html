@@ -3,27 +3,46 @@
         <link rel="stylesheet" href="style/contacts.css">
     </head>
     <body>
-        <div id="contacts-column">
-
-            <!-- Where the selectable contacts are diplayed for selection -->
-            <div id="contacts-display">
-                <button id="contact-1">
-                    <img>
-                </button>
+        <div id="header-bar">
+            <div id="logo">
+                <img id="main-logo" src="images/brownbook_logo.png">
+                <h1>BrownBook</h1>
             </div>
         </div>
-        <!-- The portion of the screen which displays the selected contact-->
-        <div id="selected-contact-column">
-
-            <!-- The header of the selected contact (image, name, basic info)-->
-            <div id="selected-contact-header">
-                <img id="selected-contact-img">
-
+        <div id="main-content">
+            <div id="contacts-column">
+                <input type="text" id="contact-search-bar" placeholder="Enter Contact Name">
+                <div id="search-bar-divider"></div>
+                <!-- Where the selectable contacts are diplayed for selection -->
+                <div id="contacts-display">
+                    <button id="contact-1" class="contact-element">
+                        <div class="contact-left">
+                            <img src="images/placeholder_user.png" class="user-icon">
+                        </div>
+                        <div class="contact-right">
+                            <div class="contact-top">
+                                <label class="contact-name">Placeholder Name</label>
+                            </div>
+                            <div class="contact-bot">
+                                <label class="contact-phone">123-456-7890</label>
+                            </div>
+                        </div>
+                    </button>
+                </div>
             </div>
+            <!-- The portion of the screen which displays the selected contact-->
+            <div id="selected-contact-column">
 
-            <!-- The widgets attactched to the selected contact (groups, birthday, etc.)-->
-            <div id="selected-contact-widgets">
+                <!-- The header of the selected contact (image, name, basic info)-->
+                <div id="selected-contact-header">
+                    <img id="selected-contact-img">
 
+                </div>
+
+                <!-- The widgets attactched to the selected contact (groups, birthday, etc.)-->
+                <div id="selected-contact-widgets">
+
+                </div>
             </div>
         </div>
     </body>
