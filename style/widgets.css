@@ -3,8 +3,10 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 20%;
+    height: 250px;
     border: 2px dotted black;
+    display: flex;
+    flex-direction: row;
 }
 
 #drag-widget-here-to-add {
@@ -26,5 +28,31 @@
     background: 
         linear-gradient(to bottom, transparent 42%, #000 42%, #000 58%, transparent 58%),
         linear-gradient(to right, transparent 42%, #000 42%, #000 58%, transparent 58%);
-    
+}
+
+.widget-box {
+    margin-top: 50px;
+    margin-left: 50px;
+    height: 150px;
+    width: 200px;
+    background-color: gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.widget-label {
+    margin-top: auto;
+}
+
+#widget-note {
+    background-color: rgba(219, 219, 31, 0.911);
+    margin-top: 5%;
+    width: 80%;
+    height: 80%;
+}
+
+.draggable-widget:hover {
+    cursor: grab;
 }

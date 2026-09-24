@@ -28,3 +28,7 @@
 .big-name-text {
     font-size: 60px;
 }
+
+.hidden {
+    visibility: hidden;
+}
