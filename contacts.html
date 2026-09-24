@@ -2,6 +2,8 @@
     <head>
         <link rel="stylesheet" href="style/contacts.css">
         <link rel="stylesheet" href="style/basic_style.css">
+        <link rel="stylesheet" href="style/widgets.css">
+        
     </head>
     <body>
         <div id="header-bar">
@@ -32,10 +34,10 @@
                     </button>
                 </div>
             </div>
-            <!-- The portion of the screen which displays the selected contact-->
+            <!-- The portion of the screen which displays the selected contact -->
             <div id="selected-contact-column">
 
-                <!-- The header of the selected contact (image, name, basic info)-->
+                <!-- The header of the selected contact (image, name, basic info) -->
                 <div id="selected-contact-header">
                     <div id="selected-contact-header-left">
                         <img id="selected-contact-img">
@@ -53,14 +55,21 @@
 
                 </div>
 
-                <!-- The widgets attactched to the selected contact (groups, birthday, etc.)-->
+                <!-- The widgets attactched to the selected contact (groups, birthday, etc.) -->
                 <div id="selected-contact-widgets">
 
+                </div>
+
+                <!-- A box that is pushed to the bottom of the contact which acts as the drop point for new widgets -->
+                <div id="drag-widget-here-to-add">
+                    <div class="plus-sign"></div>
                 </div>
             </div>
         </div>
         <footer id="widgets">
-            
+            <div class="dragable-widget" id="widget-note" draggable="true">
+
+            </div>
         </footer>
 
         <script src="scripts/contacts_handler.js" defer></script>

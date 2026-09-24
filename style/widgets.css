@@ -1,0 +1,30 @@
+#widgets {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    border: 2px dotted black;
+}
+
+#drag-widget-here-to-add {
+    display: flex;
+    border: 5px dotted black;
+    width: 80%;
+    height: 200px;
+    margin-left: 10%;
+    border-radius: 20px;
+    background-color: rgb(214, 212, 212);
+    justify-content: center;
+    align-items: center;
+}
+
+.plus-sign {
+    width: 50px;
+    height: 50px;
+    
+    background: 
+        linear-gradient(to bottom, transparent 42%, #000 42%, #000 58%, transparent 58%),
+        linear-gradient(to right, transparent 42%, #000 42%, #000 58%, transparent 58%);
+    
+}

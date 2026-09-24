@@ -21,3 +21,7 @@ function DisplaySelectedContact(parent) {
 function GetChildren(self) {
 
 }
+
+function AddWidgetToContact() {
+    
+}
