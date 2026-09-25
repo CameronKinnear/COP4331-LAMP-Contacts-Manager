@@ -14,10 +14,15 @@ document.addEventListener("DOMContentLoaded", () => {
             // Prepare JSON payload
             const payload = {
                 register: true,
+                Register: true,
                 firstName: firstName,
                 lastName: lastName,
+                FirstName: firstName,
+                LastName: lastName,
                 login: login,
-                password: password
+                Login: login,
+                password: password,
+                Password: password
             };
 
             // Update 'api/index.php' to match the actual file name in api/ folder
