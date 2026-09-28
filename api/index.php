@@ -41,6 +41,7 @@ if ($method === 'POST') {
 		$user = $stmt->fetch();
 
 		if ($user && password_verify($password, $user['Password'])) {
+			$_SESSION['userId'] = $user['ID'];
 			respond(200, [
 				'id' => (int) $user['ID'], 
 				'firstName' => $user['firstName'],

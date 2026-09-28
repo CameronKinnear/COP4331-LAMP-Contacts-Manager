@@ -2,20 +2,14 @@ isContactSelected = false;
 
 // API Functions
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("attmepting contact fetch");
+    const userId = sessionStorage.getItem("userId");
 
-
-    // Prepare JSON payload
-    const payload = {
-        contacts: true,
-        Id: sessionStorage.getItem['userId']
-    }
-
-    fetch("api/contacts.php", {
+    fetch("api/contacts.php?contacts=1&Id=${encodeURIComponent(userId)}", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(payload)
     })
         .then(response => response.json())
         .then(data => {

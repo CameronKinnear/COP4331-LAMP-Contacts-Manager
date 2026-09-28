@@ -11,11 +11,10 @@ $body = getRequestBody();
 
 // Get the users saved contacts
 if ($method === 'GET') {
-    if (isset($body['contacts'])) {
-        $id = clean($body['Id']);
+    if (isset($_GET['contacts'])) {
 
         $stmt = $db->prepare('SELECT * FROM Widgets WHERE id = :id');
-        $stmt->execute([':id' => $id]);
+        $stmt->execute([':id' => $_SESSION['userId']]);
         $widgets = $stmt->fetch();
 
         respond(200, [
