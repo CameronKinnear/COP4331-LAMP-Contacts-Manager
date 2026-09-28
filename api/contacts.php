@@ -8,8 +8,8 @@ $db = getDB();
 $body = getRequestBody();
 
 // Get the users saved contacts
-if ($method === 'POST') {
+if ($method === 'GET') {
     if (isset($body['contacts'])) {
-        echo "USer: " + $_SESSION['userId'];
+        echo "User: " . $_SESSION['userId'];
     }
 }
