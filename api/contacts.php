@@ -19,10 +19,8 @@ if ($method === 'GET') {
 
         $stmt = $db->prepare('SELECT * FROM Contacts WHERE UserID = :id');
         $stmt->execute([':id' => $_SESSION['user_id']]);
-        $contacts = $stmt->fetch();
+        $contacts = $stmt->fetchAll();
 
-        respond(200, [
-            'contactId' => $contacts['ID']
-        ]);
+        respond(200, $contacts);
     }
 }
