@@ -22,6 +22,7 @@ function LoadContacts() {
 
             let contactDipslay = document.getElementById('contacts-display');
             for (let contactInfo in data) {
+                console.log(contactInfo);
                 let newContact = CreateContactButton(contactInfo);
                 contactDipslay.appendChild(newContact);
             }
@@ -57,9 +58,9 @@ function CreateContactButton(contact) {
     `;
 
     // Fill in the data safely
-    newButton.querySelector('.contact-first-name').textContent = contact.FirstName;
-    newButton.querySelector('.contact-last-name').textContent = contact.LastName;
-    newButton.querySelector('.contact-phone').textContent = contact.PhoneNumber;
+    newButton.querySelector('.contact-first-name').innerHTML = contact.FirstName;
+    newButton.querySelector('.contact-last-name').innerHTML = contact.LastName;
+    newButton.querySelector('.contact-phone').innerHTML = contact.PhoneNumber;
 
     return newButton;
 }
