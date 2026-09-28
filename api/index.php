@@ -36,7 +36,7 @@ if ($method === 'POST') {
 			respond(400, ['error' => 'Login and password are required']);
 		}
 
-		$stmt = $db->prepare('SELECT ID, firstName, lastName, Password FROM Users WHERE Login = :login LIMIT 1');
+		$stmt = $db->prepare('SELECT ID, FirstName, LastName, Password FROM Users WHERE Login = :login LIMIT 1');
 		$stmt->execute([':login' => $login]);
 		$user = $stmt->fetch();
 
@@ -52,8 +52,8 @@ if ($method === 'POST') {
 	}
 	// 2b. Registration
 	if (isset($body['register']) && $body['register']) {
-		$login = clean($body['login']);
-		$password = clean($body['password']);
+		$login = clean($body['Login']);
+		$password = clean($body['Password']);
 		$first = clean($body['firstName'] ?? '');
 		$last = clean($body['lastName'] ?? '');
 
