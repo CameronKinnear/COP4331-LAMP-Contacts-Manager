@@ -16,13 +16,12 @@ $body = getRequestBody();
 if ($method === 'GET') {
     if (isset($_GET['contacts'])) {
 
-        $stmt = $db->prepare('SELECT * FROM Widgets WHERE id = :id');
+        $stmt = $db->prepare('SELECT * FROM Contacts WHERE userID = :id');
         $stmt->execute([':id' => $_SESSION['user_id']]);
         $widgets = $stmt->fetch();
 
         respond(200, [
-            'noteWidget' => (string) $widgets['noteWidget'],
-            'birthdayWidget' => $widgets['birthdayWidget']
+            'contactId' => $body['ID']
         ]);
     }
 }
