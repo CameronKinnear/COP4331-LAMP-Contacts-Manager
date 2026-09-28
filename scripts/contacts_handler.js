@@ -1,6 +1,38 @@
 isContactSelected = false;
 
-function AddContact() {
+// API Functions
+document.addEventListener("DOMContentLoaded", () => {
+
+
+    // Prepare JSON payload
+    const payload = {
+        contacts: true,
+    }
+
+    fetch("api/contacts.php", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error && data.error.length > 0) {
+                alert("Registration failed: " + data.error);
+            } else {
+                alert("Registration successful! Redirecting to login...");
+                window.location.href = "index.html";
+            }
+        })
+        .catch(error => {
+            console.error("Error submitting registration:", error);
+            alert("An error occurred during registration. Please check the console.");
+        });
+});
+
+
+function AddNewContact() {
 
 }
 
