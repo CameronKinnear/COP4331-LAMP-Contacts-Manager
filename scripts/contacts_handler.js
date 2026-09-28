@@ -9,7 +9,6 @@ if (document.readyState === "loading") {
 // API Functions
 function LoadContacts() {
     console.log("attmepting contact fetch");
-    const userId = sessionStorage.getItem("userId");
 
     fetch("api/contacts.php?contacts=1", { credentials: "same-origin" })
     .then(response => response.json())

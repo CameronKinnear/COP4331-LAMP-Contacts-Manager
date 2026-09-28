@@ -41,7 +41,12 @@ if ($method === 'POST') {
 		$user = $stmt->fetch();
 
 		if ($user && password_verify($password, $user['Password'])) {
-			$_SESSION['userId'] = $user['ID'];
+			if (session_status() === PHP_SESSION_NONE) {
+				session_start();
+			}
+			session_regenerate_id(true);
+			$_SESSION['user_id'] = $user['ID'];
+
 			respond(200, [
 				'id' => (int) $user['ID'], 
 				'firstName' => $user['firstName'],

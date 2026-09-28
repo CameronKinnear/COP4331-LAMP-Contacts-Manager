@@ -14,7 +14,7 @@ if ($method === 'GET') {
     if (isset($_GET['contacts'])) {
 
         $stmt = $db->prepare('SELECT * FROM Widgets WHERE id = :id');
-        $stmt->execute([':id' => $_SESSION['userId']]);
+        $stmt->execute([':id' => $_SESSION['user_id']]);
         $widgets = $stmt->fetch();
 
         respond(200, [
