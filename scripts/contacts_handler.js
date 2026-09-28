@@ -11,12 +11,7 @@ function LoadContacts() {
     console.log("attmepting contact fetch");
     const userId = sessionStorage.getItem("userId");
 
-    fetch("api/contacts.php?contacts=1&Id=${encodeURIComponent(userId)}", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        },
-    })
+    fetch("api/contacts.php?contacts=1", { credentials: "same-origin" })
     .then(response => response.json())
     .then(data => {
         if (data.error && data.error.length > 0) {
