@@ -1,7 +1,13 @@
 isContactSelected = false;
 
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", LoadContacts);
+} else {
+    LoadContacts();
+}
+
 // API Functions
-document.addEventListener("DOMContentLoaded", () => {
+function LoadContacts() {
     console.log("attmepting contact fetch");
     const userId = sessionStorage.getItem("userId");
 
@@ -11,21 +17,21 @@ document.addEventListener("DOMContentLoaded", () => {
             "Content-Type": "application/json"
         },
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error && data.error.length > 0) {
-                // Data error
-                console.log('data error');
-            } else {
-                // 200 OK
-                console.log(data);
-            }
-        })
-        .catch(error => {
-            // Error fetching response
-            console.log(error);
-        });
-});
+    .then(response => response.json())
+    .then(data => {
+        if (data.error && data.error.length > 0) {
+            // Data error
+            console.log('data error');
+        } else {
+            // 200 OK
+            console.log(data);
+        }
+    })
+    .catch(error => {
+        // Error fetching response
+        console.log(error);
+    });
+};
 
 
 function AddNewContact() {
