@@ -19,13 +19,50 @@ function LoadContacts() {
         } else {
             // 200 OK
             console.log(data);
+
+            let contactDipslay = document.getElementById('contacts-display');
+            for (let contactInfo in data) {
+                let newContact = CreateContactButton(contactInfo);
+                contactDipslay.appendChild(newContact);
+            }
         }
     })
     .catch(error => {
         // Error fetching response
         console.log(error);
     });
-};
+
+    
+}
+
+function CreateContactButton(contact) {
+    const newButton = document.createElement('button');
+    newButton.className = 'contact-element';
+    newButton.addEventListener('click', () => DisplaySelectedContact(newButton));
+    newButton.dataset.contactId = contact.contact_id;
+
+    newButton.innerHTML = `
+        <div class="contact-left">
+            <img src="images/placeholder_user.png" class="contact-icon">
+        </div>
+        <div class="contact-right">
+            <div class="contact-top">
+                <label class="contact-first-name"></label>
+                <label class="contact-last-name"></label>
+            </div>
+            <div class="contact-bot">
+                <label class="contact-phone"></label>
+            </div>
+        </div>
+    `;
+
+    // Fill in the data safely
+    newButton.querySelector('.contact-first-name').textContent = contact.FirstName;
+    newButton.querySelector('.contact-last-name').textContent = contact.LastName;
+    newButton.querySelector('.contact-phone').textContent = contact.PhoneNumber;
+
+    return newButton;
+}
 
 
 function AddNewContact() {
