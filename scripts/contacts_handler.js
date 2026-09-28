@@ -21,9 +21,9 @@ function LoadContacts() {
             console.log(data);
 
             let contactDipslay = document.getElementById('contacts-display');
-            for (let contactInfo in data) {
-                console.log(contactInfo);
-                let newContact = CreateContactButton(contactInfo);
+            for (let i = 0; i < data.length; i++) {
+                console.log(data[i]);
+                let newContact = CreateContactButton(data[i]);
                 contactDipslay.appendChild(newContact);
             }
         }
