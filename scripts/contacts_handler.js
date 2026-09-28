@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Prepare JSON payload
     const payload = {
         contacts: true,
+        Id: sessionStorage.getItem['userId']
     }
 
     fetch("api/contacts.php", {
@@ -19,15 +20,14 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => response.json())
         .then(data => {
             if (data.error && data.error.length > 0) {
-                alert("Registration failed: " + data.error);
+                // Data error
             } else {
-                alert("Registration successful! Redirecting to login...");
-                window.location.href = "index.html";
+                // 200 OK
+                console.log(data);
             }
         })
         .catch(error => {
-            console.error("Error submitting registration:", error);
-            alert("An error occurred during registration. Please check the console.");
+            // Error fetching response
         });
 });
 

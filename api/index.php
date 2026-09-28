@@ -42,8 +42,11 @@ if ($method === 'POST') {
 
 		if ($user && password_verify($password, $user['Password'])) {
 			respond(200, [
-				'id' => (int) $user['ID'], 'firstName' => $user['firstName'],
-				'lastName' => $user['lastName'], 'token' => (string) $user['ID'], 'error' => ''
+				'id' => (int) $user['ID'], 
+				'firstName' => $user['firstName'],
+				'lastName' => $user['lastName'], 
+				'token' => (string) $user['ID'], 
+				'error' => ''
 			]);
 		} else {
 			respond(401, ['id' => 0, 'firstName' => '', 'lastName' => '', 'error' => 'No Records Found']);
