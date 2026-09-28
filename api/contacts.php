@@ -12,7 +12,7 @@ $body = getRequestBody();
 // Get the users saved contacts
 if ($method === 'GET') {
     if (isset($body['contacts'])) {
-        $id = clean($body['id']);
+        $id = clean($body['Id']);
 
         $stmt = $db->prepare('SELECT * FROM Widgets WHERE id = :id');
         $stmt->execute([':id' => $id]);

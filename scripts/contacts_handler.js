@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             if (data.error && data.error.length > 0) {
                 // Data error
+                console.log('data error');
             } else {
                 // 200 OK
                 console.log(data);
@@ -28,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => {
             // Error fetching response
+            console.log(error);
         });
 });
 
