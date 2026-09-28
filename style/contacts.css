@@ -101,3 +101,7 @@
 #selected-contact-last-name {
     display: block
 }
+
+#header-name {
+    margin-left: 50px;
+}
