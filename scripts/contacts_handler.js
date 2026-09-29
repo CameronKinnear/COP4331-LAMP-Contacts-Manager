@@ -31,9 +31,7 @@ function LoadContacts() {
     .catch(error => {
         // Error fetching response
         console.log(error);
-    });
-
-    
+    });   
 }
 
 
@@ -153,6 +151,37 @@ function EditSelectedContact(contact) {
 
 function SaveEditedContact(contact) {
 
+    const firstname = contact.querySelector('.contact-first-name').innerHTML;
+    const lastname = contact.querySelector('.contact-last-name').innerHTML;
+    const phonenumber = contact.querySelector('.contact-phone').innerHTML;
+    const email = null;
+
+    let payload = {
+        save: true,
+        firstname: firstname,
+        lastName: lastname,
+        email: email,
+        phone: phonenumber
+    };
+
+    fetch("api/contacts.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+    .then(({ status, body }) => {
+        if (status >= 400 || body.error) {
+            
+        } else {
+            console.log(data.message);
+        }
+    })
+    .catch(err => {
+        
+    });
 }
 
 function DeleteSelectedContact(contact) {
