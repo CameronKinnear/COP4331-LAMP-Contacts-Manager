@@ -3,7 +3,7 @@
     height: 50px;
 }
 
-#logo{
+#logo {
     display: flex;
     flex-direction: row;
 }
@@ -116,7 +116,7 @@
 
 .contact-left {
     display: inherit;
-    flex-direction: column; 
+    flex-direction: column;
 }
 
 .contact-right {
@@ -191,4 +191,81 @@
 
 button:hover {
     cursor: pointer;
+}
+
+/* Ensure the hidden class is respected */
+.hidden {
+    display: none !important;
+}
+
+/* Constrain the selected header layout */
+#selected-contact-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+#selected-contact-img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+#selected-contact-header-right {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    max-width: 500px;
+    /* Prevents stretching endlessly across the screen */
+}
+
+/* Stacks First Name and Last Name neatly under each other */
+#selected-contact-header-top {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.name-field-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.field-caption {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #4a3423;
+}
+
+/* Styles inputs to remain clean and responsive */
+.contact-input-field {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: #2b1d0c;
+    background-color: #ffffff;
+    border: 1px solid #c4a482;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.contact-input-field:focus {
+    border-color: #7b4a2d;
+    box-shadow: 0 0 0 3px rgba(123, 74, 45, 0.15);
+}
+
+.contact-input-field::placeholder {
+    color: #a89f91;
+    font-size: 0.95rem;
 }
