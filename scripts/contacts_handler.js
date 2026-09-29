@@ -112,8 +112,8 @@ function CreateContactElement(contactInfo) {
                     <label class="contact-last-name">${contactInfo.LastName || ''}</label>
                 </div>
                 <div class="contact-bot">
-                    <label class="contact-phone">${contactInfo.PhoneNumber || ''}</label>
-                    <label class="contact-email" style="display: none;">${contactInfo.Email || ''}</label>
+                    <label class="contact-phone no-display">${contactInfo.PhoneNumber || ''}</label>
+                    <label class="contact-email">${contactInfo.Email || ''}</label>
                 </div> 
             </div>           
         </button>
