@@ -96,10 +96,10 @@ function CreateContactElement() {
 function PostContact(contact) {
     let payload = {
         save: true,
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        email: contact.email,
-        phone: contact.phone
+        firstName: contact.querySelector('.contact-first-name').innerHTML,
+        lastName: contact.querySelector('.contact-last-name').innerHTML,
+        email: contact.querySelector('.contact-email').innerHTML,
+        phone: contact.querySelector('.contact-phone').innerHTML
     };
 
     fetch("api/contacts.php", {
