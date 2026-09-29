@@ -37,16 +37,11 @@
                                 <label class="contact-first-name">Placeholder</label>
                                 <label class="contact-last-name">Name</label>
                             </div>
-                            <div class="contact-right">
-                                <div class="contact-top">
-                                    <label class="contact-first-name">Placeholder</label>
-                                    <label class="contact-last-name">Name</label>
-                                </div>
-                                <div class="contact-bot">
-                                    <label class="contact-phone no-display">123-456-7890</label>
-                                    <label class="contact-email">example@gmail.com</label>
-                                </div> 
-                            </div>           
+                            <div class="contact-bot">
+                                <label class="contact-phone no-display">123-456-7890</label>
+                                <label class="contact-email">example@gmail.com</label>
+                            </div> 
+                        </div>           
                         </button>
                         <button class="edit-this-contact hidden" value="edit" onclick="EditSelectedContact(this.parentElement)">
                             <img class="contact-change-icon edit-icon" src="images/edit_icon.png" alt="Edit">
@@ -57,12 +52,11 @@
                         </button>
                     </div>
                 </div>
-            </div>
-
             <button id="add-new-contact-button" onclick="AddNewContact()">
                 <span class="text-medium">Add New Contact</span>
             </button>
         </div>
+        
 
         <!-- Selected contact column -->
         <div id="selected-contact-column">
