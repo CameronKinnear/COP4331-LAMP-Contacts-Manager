@@ -23,7 +23,7 @@ function LoadContacts() {
             let contactDipslay = document.getElementById('contacts-display');
             for (let i = 0; i < data.length; i++) {
                 console.log(data[i]);
-                let newContact = CreateContactButton(data[i]);
+                let newContact = CreateContactElement(data[i]);
                 contactDipslay.appendChild(newContact);
             }
         }
@@ -38,38 +38,53 @@ function LoadContacts() {
 
 
 // !!! NEED TO UPDATE FOR CURRENT BUTTON ELEMENT
-function CreateContactButton(contact) {
-    const newButton = document.createElement('button');
-    newButton.className = 'contact-element';
-    newButton.addEventListener('click', () => DisplaySelectedContact(newButton));
-    newButton.dataset.contactId = contact.contact_id;
+function CreateContactElement(contact) {
+    const newElement = document.createElement('div');
+    newElement.className = 'contact-element';
 
-    newButton.innerHTML = `
-        <div class="contact-left">
-            <img src="images/placeholder_user.png" class="contact-icon">
-        </div>
-        <div class="contact-right">
-            <div class="contact-top">
-                <label class="contact-first-name"></label>
-                <label class="contact-last-name"></label>
+    newElement.innerHTML = `
+        <button class="select-this-contact button-nodesign" onclick="DisplaySelectedContact(this.parentElement)">
+            <div class="contact-left">
+                <img src="images/placeholder_user.png" class="contact-icon">
             </div>
-            <div class="contact-bot">
-                <label class="contact-phone"></label>
-            </div>
-        </div>
+            <div class="contact-right">
+                <div class="contact-top">
+                    <label class="contact-first-name">Placeholder</label>
+                    <label class="contact-last-name">Name</label>
+                </div>
+                <div class="contact-bot">
+                    <label class="contact-phone">123-456-7890</label>
+                </div> 
+            </div>           
+        </button>
+        <button class="edit-this-contact hidden" value="edit" onclick="EditSelectedContact(this.parentElement)">
+            <img class="contact-change-icon edit-icon" src="images/edit_icon.png">
+        </button>
+        <button class="delete-this-contact hidden" value="delete" onclick="DeleteSelectedContact(this.parentElement)">
+            <span class="delete-confirm-text no-display">Confirm Deletion</span>
+            <img class="contact-change-icon trash-icon" src="images/trash-icon.png">
+        </button>
     `;
 
     // Fill in the data safely
-    newButton.querySelector('.contact-first-name').innerHTML = contact.FirstName;
-    newButton.querySelector('.contact-last-name').innerHTML = contact.LastName;
-    newButton.querySelector('.contact-phone').innerHTML = contact.PhoneNumber;
+    newElement.querySelector('.contact-first-name').innerHTML = contact.FirstName;
+    newElement.querySelector('.contact-last-name').innerHTML = contact.LastName;
+    newElement.querySelector('.contact-phone').innerHTML = contact.PhoneNumber;
 
-    return newButton;
+    AddMouseOverFunctionality(newElement);
+
+    return newElement;
 }
 
 
 function AddNewContact() {
-
+    const jsonTemplate = {  'FirstName' : '', 
+                            'LastName' : '', 
+                            'PhoneNumber' : ''};
+    let newElement = CreateContactElement(jsonTemplate);
+    const display = document.getElementById('contacts-display');
+    display.appendChild(newElement);
+    EditSelectedContact(newElement);
 }
 
 
@@ -104,9 +119,11 @@ function EditSelectedContact(contact) {
     const editContactButton = contact.querySelector('.edit-this-contact');
     const editImg = contact.querySelector('.edit-icon');
 
+    // Save the contact
     if (editContactButton.value == 'save') {
         editImg.src = 'images/edit_icon.png';
         editContactButton.value = 'edit';
+        editContactButton.style.backgroundColor = 'var(--blue)';
         SaveEditedContact(contact);
         return;
     }
@@ -116,6 +133,7 @@ function EditSelectedContact(contact) {
     const lastName = contact.querySelector('.contact-last-name');
     const phone = contact.querySelector('.contact-phone');
 
+    editContactButton.style.backgroundColor = 'var(--green)';
 
     contactImage.src = image.src;
     editImg.src = 'images/save_icon.png';
@@ -158,6 +176,10 @@ function DeleteSelectedContact(contact) {
 const contacts = document.querySelectorAll('.contact-element');
 
 contacts.forEach(contact => {
+    AddMouseOverFunctionality(contact);
+})
+
+function AddMouseOverFunctionality(contact) {
     contact.addEventListener('mouseenter', (e) => {
         let contactButtons = e.currentTarget.querySelectorAll('button');
         contactButtons[1].classList.remove('hidden');
@@ -165,13 +187,11 @@ contacts.forEach(contact => {
     })
     contact.addEventListener('mouseleave', (e) => {
         let contactButtons = e.currentTarget.querySelectorAll('button');
-        if (selectedContact != contact) {
-            contactButtons[1].classList.add('hidden');
-            contactButtons[2].classList.add('hidden');
-        }
+        contactButtons[1].classList.add('hidden');
+        contactButtons[2].classList.add('hidden');
 
     })
-})
+}
 
 
 // Widget Functions
