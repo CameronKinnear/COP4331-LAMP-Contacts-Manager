@@ -83,10 +83,11 @@ function CreateContactElement(contactInfo) {
     `;
 
     // Fill in the data
+    console.log(contactInfo.ID);
     if (contactInfo.ID != -1) {
-        newElement.value = contactInfo.ID;
+        newElement.dataset.id = contactInfo.ID;
     }
-    
+
     newElement.querySelector('.contact-first-name').innerHTML = contactInfo.FirstName;
     newElement.querySelector('.contact-last-name').innerHTML = contactInfo.LastName;
     newElement.querySelector('.contact-email').innerHTML = contactInfo.Email;
@@ -219,7 +220,7 @@ function DeleteSelectedContact(contact) {
         return
     }
 
-    console.log('delete');
+    console.log(contact.value);
 }
 
 // ADDS MOUSE OVER FUNCTIONAILITY TO ALL CONTACTS AS SOON AS PAGE LOADS
