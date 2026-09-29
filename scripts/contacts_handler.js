@@ -1,5 +1,7 @@
 let selectedContact = null;
 
+// CHECKS IF CONTACTS NEED TO BE LOADED ON HREF CHANGE
+//
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", InitContacts);
 } else {
@@ -11,7 +13,8 @@ function InitContacts() {
     InitWidgetDragDrop();
 }
 
-// API Functions
+//  LOADS THE CONTACTS ASSOCIATED WITH THE CURRENTLY LOGGED IN USER
+//  
 function LoadContacts() {
     console.log("attempting contact fetch");
 
@@ -34,10 +37,35 @@ function LoadContacts() {
         });
 }
 
-function CreateContactElement(contact) {
+//  ADD NEW CONTACT BUTTON, CREATES THEN ADDS TO DISPLAY THEN POSTS TO DATABASE
+//
+function AddNewContact() {
+    jsonTemp = {'FirstName' : '[First]', 'LastName' : '[Last]',
+                'Email' : '[Email]', 'PhoneNumber' : '[Phone]'
+    }
+    const newContact = CreateContactElement(jsonTemp);
+    document.getElementById('contacts-display').appendChild(newContact);
+    PostContact(newContact);
+  
+    // Open right-hand pane in edit mode
+    EditSelectedContact(newContact);
+  
+    // Automatically focus on the First Name input
+    const contactfName = document.getElementById('selected-contact-first-name');
+    if (contactfName) {
+        contactfName.focus();
+    }
+}
+
+
+//  CREATES A NEW CONTACT ELEMENT WITH JSON INPUT
+//  contactInfo = {'ID', 'FirstName', 'LastName', 'Email', 'PhoneNumber'}
+//
+function CreateContactElement(contactInfo) {
     const newElement = document.createElement('div');
     newElement.className = 'contact-element';
 
+    // Template
     newElement.innerHTML = `
         <button class="select-this-contact button-nodesign" onclick="DisplaySelectedContact(this.parentElement)">
             <div class="contact-left">
@@ -45,11 +73,12 @@ function CreateContactElement(contact) {
             </div>
             <div class="contact-right">
                 <div class="contact-top">
-                    <label class="contact-first-name">${contact.FirstName || ''}</label>
-                    <label class="contact-last-name">${contact.LastName || ''}</label>
+                    <label class="contact-first-name">${contactInfo.FirstName || ''}</label>
+                    <label class="contact-last-name">${contactInfo.LastName || ''}</label>
                 </div>
                 <div class="contact-bot">
-                    <label class="contact-phone">${contact.PhoneNumber || ''}</label>
+                    <label class="contact-phone">${contactInfo.PhoneNumber || ''}</label>
+                    <label class="contact-email">${contactInfo.Email || ''}</label>
                 </div> 
             </div>           
         </button>
@@ -62,30 +91,50 @@ function CreateContactElement(contact) {
         </button>
     `;
 
+    // Fill in the data
+    console.log(contactInfo.ID);
+    if (contactInfo.ID != -1) {
+        newElement.dataset.id = contactInfo.ID;
+    }
+  
+    // Add mouse over functionality
     AddMouseOverFunctionality(newElement);
     return newElement;
 }
 
-function AddNewContact() {
-    const jsonTemplate = {
-        'FirstName': '',
-        'LastName': '',
-        'PhoneNumber': ''
+//  POSTS A CONTACT TO THE DATABASE
+// 
+function PostContact(contact) {
+    let payload = {
+        save: true,
+        firstName: contact.querySelector('.contact-first-name').innerHTML,
+        lastName: contact.querySelector('.contact-last-name').innerHTML,
+        email: contact.querySelector('.contact-email').innerHTML,
+        phone: contact.querySelector('.contact-phone').innerHTML
     };
-    const newElement = CreateContactElement(jsonTemplate);
-    const display = document.getElementById('contacts-display');
-    display.appendChild(newElement);
 
-    // Open right-hand pane in edit mode
-    EditSelectedContact(newElement);
-
-    // Automatically focus on the First Name input
-    const contactfName = document.getElementById('selected-contact-first-name');
-    if (contactfName) {
-        contactfName.focus();
-    }
+    fetch("api/contacts.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+    .then(({ status, body }) => {
+        if (status >= 400 || body.error) {
+            
+        } else {
+            console.log(data.message);
+        }
+    })
+    .catch(err => {
+        
+    });
 }
 
+// COPIES DATA FROM THE CONTACTS COLUMN TO DISPLAY IN THE LARGE AREA
+//
 function DisplaySelectedContact(contact) {
     const contactHeader = document.getElementById('selected-contact-header');
     const contactImage = document.getElementById('selected-contact-img');
@@ -137,6 +186,8 @@ function DisplaySelectedContact(contact) {
     selectedContact = contact;
 }
 
+//  MAKES SELECTED CONTACT EDITABLE AND SETS UP SAVE ACTION
+//
 function EditSelectedContact(contact) {
     const editContactButton = contact.querySelector('.edit-this-contact');
     const editImg = contact.querySelector('.edit-icon');
@@ -218,6 +269,8 @@ function EditSelectedContact(contact) {
     selectedContact = contact;
 }
 
+//  SAVES AN ALREADY EXISTING CONTACT TO THE DATABASE
+//
 function SaveEditedContact(contact) {
     const contactfName = document.getElementById('selected-contact-first-name');
     const contactlName = document.getElementById('selected-contact-last-name');
@@ -234,10 +287,12 @@ function SaveEditedContact(contact) {
     const sidebarFirst = contact.querySelector('.contact-first-name');
     const sidebarLast = contact.querySelector('.contact-last-name');
     const sidebarPhone = contact.querySelector('.contact-phone');
+    const sidebarEmail = contact.querySelector('.contact-email');
 
     if (sidebarFirst) sidebarFirst.innerText = firstname;
     if (sidebarLast) sidebarLast.innerText = lastname;
     if (sidebarPhone) sidebarPhone.innerText = phonenumber;
+    if (sidebarEmail) sidebarEmail.innerText = email;
 
     let payload = {
         save: true,
@@ -246,27 +301,10 @@ function SaveEditedContact(contact) {
         email: email,
         phone: phonenumber
     };
-
-    fetch("api/contacts.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    })
-        .then(response => response.json().then(data => ({ status: response.status, body: data })))
-        .then(({ status, body }) => {
-            if (status >= 400 || body.error) {
-                console.error("Save error:", body.error);
-            } else {
-                console.log("Contact saved successfully:", body.message || body);
-            }
-        })
-        .catch(err => {
-            console.error("Network or script error on save:", err);
-        });
 }
 
+//  DELETES AN ALREADY EXISTING CONTACT FROM THE DATABASE
+//
 function DeleteSelectedContact(contact) {
     const deleteButton = contact.querySelector('.delete-this-contact');
     const deleteImg = contact.querySelector('.trash-icon');
@@ -286,6 +324,15 @@ function DeleteSelectedContact(contact) {
     if (contactHeader) contactHeader.classList.add('hidden');
 }
 
+// ADDS MOUSE OVER FUNCTIONAILITY TO ALL CONTACTS AS SOON AS PAGE LOADS
+//
+const contacts = document.querySelectorAll('.contact-element');
+contacts.forEach(contact => {
+    AddMouseOverFunctionality(contact);
+})
+
+//  ADDS MOUSE OVER FUNCTIONAILITY TO SPECIFIED CONTACT
+// 
 function AddMouseOverFunctionality(contact) {
     contact.addEventListener('mouseenter', (e) => {
         let contactButtons = e.currentTarget.querySelectorAll('button');
