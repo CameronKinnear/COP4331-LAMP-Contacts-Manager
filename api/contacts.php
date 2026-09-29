@@ -11,7 +11,7 @@ setCORSHeaders();
 
 $method = $_SERVER['REQUEST_METHOD'];
 $db = getDB();
-$body = getRequestBody();
+
 
 // Get the users saved contacts
 if ($method === 'GET') {
@@ -24,6 +24,8 @@ if ($method === 'GET') {
         respond(200, $contacts);
     }
 }
+
+$body = getRequestBody();
 
 if ($method === 'POST') {
     if (isset($body['save'])) {
