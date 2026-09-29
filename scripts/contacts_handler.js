@@ -1,4 +1,4 @@
-isContactSelected = false;
+let selectedContact = null;
 
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", LoadContacts);
@@ -78,17 +78,68 @@ let contactImage = document.getElementById('selected-contact-img');
 let contactfName = document.getElementById('selected-contact-first-name');
 let contactlName = document.getElementById('selected-contact-last-name');
 
-function DisplaySelectedContact(parent) {
-    const image = parent.querySelector('.contact-icon');
-    const firstName = parent.querySelector('.contact-first-name');
-    const lastName = parent.querySelector('.contact-last-name');
-    const phone = parent.querySelector('.contact-phone');
+function DisplaySelectedContact(contact) {
+    console.log(contact);
+    const image = contact.querySelector('.contact-icon');
+    const firstName = contact.querySelector('.contact-first-name');
+    const lastName = contact.querySelector('.contact-last-name');
+    const phone = contact.querySelector('.contact-phone');
 
     contactImage.src = image.src;
+
     contactfName.value = firstName.innerHTML;
+    contactfName.readOnly = true;
+    contactfName.classList.add('disabled-input');
+
     contactlName.value = lastName.innerHTML;
+    contactlName.readOnly = true
+    contactlName.classList.add('disabled-input');
+
     addWidgetContainer.classList.remove('hidden');
-    isContactSelected = true;
+    selectedContact = contact;
+}
+
+function EditSelectedContact(contact) {
+
+    const editContactButton = contact.querySelector('.edit-this-contact');
+    const editImg = contact.querySelector('.edit-icon');
+
+    if (editContactButton.value == 'save') {
+        console.log('saving contact');
+        editImg.src = 'images/edit_icon.png';
+        editContactButton.value = 'edit';
+        SaveEditedContact(contact);
+        return;
+    }
+    
+    const image = contact.querySelector('.contact-icon');
+    const firstName = contact.querySelector('.contact-first-name');
+    const lastName = contact.querySelector('.contact-last-name');
+    const phone = contact.querySelector('.contact-phone');
+
+
+    contactImage.src = image.src;
+    editImg.src = 'images/save_icon.png';
+
+    contactfName.value = firstName.innerHTML;
+    contactfName.readOnly = false
+    contactfName.classList.remove('disabled-input');
+
+    contactlName.value = lastName.innerHTML;
+    contactlName.readOnly = false;
+    contactlName.classList.remove('disabled-input');
+    
+    addWidgetContainer.classList.remove('hidden');
+    editContactButton.value = 'save';
+    selectedContact = contact;
+}
+
+function SaveEditedContact(contact) {
+
+}
+
+function DeleteSelectedContact(contact) {
+    console.log("Delete");
 }
 
 const contacts = document.querySelectorAll('.contact-element');
@@ -96,15 +147,16 @@ const contacts = document.querySelectorAll('.contact-element');
 contacts.forEach(contact => {
     contact.addEventListener('mouseenter', (e) => {
         let contactButtons = e.currentTarget.querySelectorAll('button');
-        console.log(contactButtons);
         contactButtons[1].classList.remove('hidden');
         contactButtons[2].classList.remove('hidden');
     })
     contact.addEventListener('mouseleave', (e) => {
         let contactButtons = e.currentTarget.querySelectorAll('button');
-        console.log(contactButtons);
-        contactButtons[1].classList.add('hidden');
-        contactButtons[2].classList.add('hidden');
+        if (selectedContact != contact) {
+            contactButtons[1].classList.add('hidden');
+            contactButtons[2].classList.add('hidden');
+        }
+
     })
 })
 
@@ -119,7 +171,7 @@ function AddWidgetToContact(widget) {
 
 function GetWidgetForContact(draggableWidgetId) {
 
-    if (isContactSelected == false) {
+    if (selectedContact == null) {
         console.log("Contact is not selected");
         return null;
     }

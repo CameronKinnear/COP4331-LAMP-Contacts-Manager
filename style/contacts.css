@@ -142,3 +142,8 @@
     background-color: black;
     width: auto;
 }
+
+.disabled-input {
+    outline: none;
+    box-shadow: none;
+}

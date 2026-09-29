@@ -20,7 +20,7 @@
                 <!-- Where the selectable contacts are diplayed for selection -->
                 <div id="contacts-display">
                     <div class="contact-element">
-                        <button class="select-this-contact button-nodesign" onclick="DisplaySelectedContact(this)">
+                        <button class="select-this-contact button-nodesign" onclick="DisplaySelectedContact(this.parentElement)">
                             <div class="contact-left">
                                 <img src="images/placeholder_user.png" class="contact-icon">
                             </div>
@@ -34,11 +34,11 @@
                                 </div> 
                             </div>           
                         </button>
-                        <button class="edit-this-contact hidden">
-                            <img class="contact-change-icon" src="images/edit_icon.png">
+                        <button class="edit-this-contact hidden" value="edit" onclick="EditSelectedContact(this.parentElement)">
+                            <img class="contact-change-icon edit-icon" src="images/edit_icon.png">
                         </button>
-                        <button class="delete-this-contact hidden">
-                                <img class="contact-change-icon" src="images/trash-icon.png">
+                        <button class="delete-this-contact hidden" onclick="DeleteSelectedContact(this.parentElement)">
+                                <img class="contact-change-icon trash-icon" src="images/trash-icon.png">
                         </button>
                     </div>
                 </div>
