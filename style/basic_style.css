@@ -1,3 +1,31 @@
+:root {
+    --dark-brown: #4a2e1f;
+    --brown: #8b5a3c;
+    --light-brown: #e8d8c4;
+    --cream: #f7f1e8;
+}
+
+body {
+    background-color: var(--cream);
+    color: var(--dark-brown);
+}
+
+button {
+    background-color: var(--brown);
+    color: var(--cream);
+    border: 1px solid var(--dark-brown);
+}
+
+button:hover {
+    background-color: var(--dark-brown);
+}
+
+input {
+    background-color: white;
+    border: 1px solid var(--brown);
+    color: var(--dark-brown);
+}
+
 .flex-center {
     display: flex;
     justify-self: center;

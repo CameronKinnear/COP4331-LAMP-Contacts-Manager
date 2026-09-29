@@ -9,13 +9,13 @@
 }
 
 #contacts-column {
-    border: 2px solid black;
+    border: 2px solid var(--dark-brown);
     height: 100%;
     width: 35%;
 }
 
 #selected-contact-column {
-    border: 2px solid black;
+    border: 2px solid var(--dark-brown);
     height: 100%;
     width: 65%;
 }
@@ -29,7 +29,7 @@
 #search-bar-divider {
     width: 95%;
     margin-left: 2.5%;
-    background-color: black;
+    background-color: var(--brown);
     height: 1px;
     margin-top: 5px;
 }
@@ -47,7 +47,7 @@
     height: 50px;
     margin-top: 10px;
     margin-left: 5%;
-    border: 2px solid black;
+    border: 2px solid var(--dark-brown);
     width: 90%;
 }
 
@@ -151,7 +151,7 @@
 
 .edit-this-contact-button {
     height: 50px;
-    background-color: black;
+    background-color: var(--dark-brown);
     width: auto;
 }
 

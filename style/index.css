@@ -1,5 +1,5 @@
 #login-box {
-    border: 2px solid black;
+    border: 2px solid var(--dark-brown);
     min-width: 300px;
     max-width: 35%;
     padding: 5%;
