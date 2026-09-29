@@ -32,11 +32,11 @@ if ($method === 'POST') {
         $firstName = clean($body['firstName']);
         $lastName = clean($body['lastName']);
         $email = cleans($body['email']);
-        $phone = clean($body['phone'])
+        $phone = clean($body['phone']);
 
         $stmt = $db->prepare('  INSERT INTO Contacts (FirstName, LastName, Email, PhoneNumber, UserID)
                                 VALUES (:firstName, :lastName, :email, :phone, :userId)');
-		$stmt->execute([':firstName' => $firstName, ':lastName' => $lastName, ':email' => $email, 'phone' => $phone], 'userId' => $_SESSION['user_id']);
+		$stmt->execute([':firstName' => $firstName, ':lastName' => $lastName, ':email' => $email, 'phone' => $phone, 'userId' => $_SESSION['user_id']]);
 		$contact = $stmt->fetch();
 
         respond(200, [
