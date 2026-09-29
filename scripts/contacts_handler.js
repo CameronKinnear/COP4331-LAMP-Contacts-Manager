@@ -37,18 +37,22 @@ function LoadContacts() {
     });   
 }
 
-//  ADD NEW CONTACT BUTTON, CREATES THEN POSTS TO DATABASE
+//  ADD NEW CONTACT BUTTON, CREATES THEN ADDS TO DISPLAY THEN POSTS TO DATABASE
 //
 function AddNewContact() {
-    const newContact = CreateContactElement();
+    jsonTemp = {'firstName' : '[First]', 'lastName' : '[Last]',
+                'email' : '[Email]', 'phone' : '[Phone]'
+    }
+    const newContact = CreateContactElement(jsonTemp);
     document.getElementById('contacts-display').appendChild(newContact);
     PostContact(newContact);
 }
 
 
-//  CREATES A NEW CONTACT ELEMENT TEMPLATE WITH DEFAULT VALUES
+//  CREATES A NEW CONTACT ELEMENT WITH JSON INPUT
+//  contactInfo = {'firstName', 'lastName', 'email', 'phone'}
 //
-function CreateContactElement() {
+function CreateContactElement(contactInfo) {
     const newElement = document.createElement('div');
     newElement.className = 'contact-element';
 
@@ -79,10 +83,10 @@ function CreateContactElement() {
     `;
 
     // Fill in the data
-    newElement.querySelector('.contact-first-name').innerHTML = "[First Name]";
-    newElement.querySelector('.contact-last-name').innerHTML = "[Last Name]";
-    newElement.querySelector('.contact-email').innerHTML = "[Email]";
-    newElement.querySelector('.contact-phone').innerHTML = "[Phone Number]";
+    newElement.querySelector('.contact-first-name').innerHTML = contactInfo.firstName;
+    newElement.querySelector('.contact-last-name').innerHTML = contactInfo.lastName;
+    newElement.querySelector('.contact-email').innerHTML = contactInfo.email;
+    newElement.querySelector('.contact-phone').innerHTML = contactInfo.phone;
 
     // Add mouse over functionality
     AddMouseOverFunctionality(newElement);
