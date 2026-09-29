@@ -37,7 +37,6 @@ if ($method === 'POST') {
         $stmt = $db->prepare('  INSERT INTO Contacts (FirstName, LastName, Email, PhoneNumber, UserID)
                                 VALUES (:firstName, :lastName, :email, :phone, :userId)');
 		$stmt->execute([':firstName' => $firstName, ':lastName' => $lastName, ':email' => $email, 'phone' => $phone, 'userId' => $_SESSION['user_id']]);
-		$contact = $stmt->fetch();
 
         respond(200, [
             'message' => 'Contact Saved'

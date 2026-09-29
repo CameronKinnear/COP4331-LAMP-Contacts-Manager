@@ -52,7 +52,7 @@ function CreateContactElement() {
     const newElement = document.createElement('div');
     newElement.className = 'contact-element';
 
-    // Template for 
+    // Template
     newElement.innerHTML = `
         <button class="select-this-contact button-nodesign" onclick="DisplaySelectedContact(this.parentElement)">
             <div class="contact-left">
