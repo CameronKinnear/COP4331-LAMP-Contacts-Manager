@@ -40,8 +40,8 @@ function LoadContacts() {
 //  ADD NEW CONTACT BUTTON, CREATES THEN ADDS TO DISPLAY THEN POSTS TO DATABASE
 //
 function AddNewContact() {
-    jsonTemp = {'firstName' : '[First]', 'lastName' : '[Last]',
-                'email' : '[Email]', 'phone' : '[Phone]'
+    jsonTemp = {'FirstName' : '[First]', 'Lastname' : '[Last]',
+                'Email' : '[Email]', 'PhoneNumber' : '[Phone]'
     }
     const newContact = CreateContactElement(jsonTemp);
     document.getElementById('contacts-display').appendChild(newContact);
@@ -50,7 +50,7 @@ function AddNewContact() {
 
 
 //  CREATES A NEW CONTACT ELEMENT WITH JSON INPUT
-//  contactInfo = {'firstName', 'lastName', 'email', 'phone'}
+//  contactInfo = {'FirstName', 'LastName', 'Email', 'PhoneNumber'}
 //
 function CreateContactElement(contactInfo) {
     const newElement = document.createElement('div');
@@ -83,10 +83,10 @@ function CreateContactElement(contactInfo) {
     `;
 
     // Fill in the data
-    newElement.querySelector('.contact-first-name').innerHTML = contactInfo.firstName;
-    newElement.querySelector('.contact-last-name').innerHTML = contactInfo.lastName;
-    newElement.querySelector('.contact-email').innerHTML = contactInfo.email;
-    newElement.querySelector('.contact-phone').innerHTML = contactInfo.phone;
+    newElement.querySelector('.contact-first-name').innerHTML = contactInfo.FirstName;
+    newElement.querySelector('.contact-last-name').innerHTML = contactInfo.LastName;
+    newElement.querySelector('.contact-email').innerHTML = contactInfo.Email;
+    newElement.querySelector('.contact-phone').innerHTML = contactInfo.PhoneNumber;
 
     // Add mouse over functionality
     AddMouseOverFunctionality(newElement);
