@@ -42,12 +42,43 @@
 }
 
 .contact-element {
-    height: 50px;
-    width: 90%;
-    margin-left: 5%;
-    margin-top: 5px;
-    margin-bottom: 5px;
     display: flex;
+    flex-direction: row;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 5%;
+    border: 2px solid black;
+    width: 90%;
+}
+
+.contact-element:hover {
+    cursor: pointer;
+}
+
+.select-this-contact {
+    height: inherit;
+    display: flex;
+    width: auto;
+    flex: 1;
+}
+
+
+.edit-this-contact {
+    width: 50px;
+    height: inherit;
+    margin-left: auto;
+    padding: 0;
+}
+
+.contact-change-icon {
+    width: auto;
+    height: 80%;
+    margin: 0;
+}
+
+.delete-this-contact {
+    width: 50px;
+    height: inherit;
 }
 
 .contact-icon {
@@ -104,4 +135,10 @@
 
 #header-name {
     margin-left: 50px;
+}
+
+.edit-this-contact-button {
+    height: 50px;
+    background-color: black;
+    width: auto;
 }

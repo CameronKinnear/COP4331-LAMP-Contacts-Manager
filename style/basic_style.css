@@ -32,3 +32,13 @@
 .hidden {
     visibility: hidden;
 }
+
+.input-nodesign {
+    border: none;
+    field-sizing: content;
+    padding: 10px;
+}
+
+.button-nodesign {
+    border: none;
+}

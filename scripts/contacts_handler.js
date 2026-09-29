@@ -36,6 +36,8 @@ function LoadContacts() {
     
 }
 
+
+// !!! NEED TO UPDATE FOR CURRENT BUTTON ELEMENT
 function CreateContactButton(contact) {
     const newButton = document.createElement('button');
     newButton.className = 'contact-element';
@@ -70,6 +72,8 @@ function AddNewContact() {
 
 }
 
+
+// Displays the selected contact to the large column
 let contactImage = document.getElementById('selected-contact-img');
 let contactfName = document.getElementById('selected-contact-first-name');
 let contactlName = document.getElementById('selected-contact-last-name');
@@ -81,15 +85,31 @@ function DisplaySelectedContact(parent) {
     const phone = parent.querySelector('.contact-phone');
 
     contactImage.src = image.src;
-    contactfName.innerHTML = firstName.innerHTML
-    contactlName.innerHTML = lastName.innerHTML
+    contactfName.value = firstName.innerHTML;
+    contactlName.value = lastName.innerHTML;
     addWidgetContainer.classList.remove('hidden');
     isContactSelected = true;
 }
 
-function GetChildren(self) {
+const contacts = document.querySelectorAll('.contact-element');
 
-}
+contacts.forEach(contact => {
+    contact.addEventListener('mouseenter', (e) => {
+        let contactButtons = e.currentTarget.querySelectorAll('button');
+        console.log(contactButtons);
+        contactButtons[1].classList.remove('hidden');
+        contactButtons[2].classList.remove('hidden');
+    })
+    contact.addEventListener('mouseleave', (e) => {
+        let contactButtons = e.currentTarget.querySelectorAll('button');
+        console.log(contactButtons);
+        contactButtons[1].classList.add('hidden');
+        contactButtons[2].classList.add('hidden');
+    })
+})
+
+
+// Widget Functions
 
 let selectedWidgets = document.getElementById('selected-contact-widgets');
 
