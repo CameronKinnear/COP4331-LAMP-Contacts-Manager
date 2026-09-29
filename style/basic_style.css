@@ -33,6 +33,11 @@
     visibility: hidden;
 }
 
+.no-display {
+    visibility: hidden;
+    display: none;
+}
+
 .input-nodesign {
     border: none;
     field-sizing: content;

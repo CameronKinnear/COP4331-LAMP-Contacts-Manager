@@ -37,8 +37,9 @@
                         <button class="edit-this-contact hidden" value="edit" onclick="EditSelectedContact(this.parentElement)">
                             <img class="contact-change-icon edit-icon" src="images/edit_icon.png">
                         </button>
-                        <button class="delete-this-contact hidden" onclick="DeleteSelectedContact(this.parentElement)">
-                                <img class="contact-change-icon trash-icon" src="images/trash-icon.png">
+                        <button class="delete-this-contact hidden" value="delete" onclick="DeleteSelectedContact(this.parentElement)">
+                            <span class="delete-confirm-text no-display">Confirm Deletion</span>
+                            <img class="contact-change-icon trash-icon" src="images/trash-icon.png">
                         </button>
                     </div>
                 </div>

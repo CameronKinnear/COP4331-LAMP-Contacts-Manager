@@ -105,7 +105,6 @@ function EditSelectedContact(contact) {
     const editImg = contact.querySelector('.edit-icon');
 
     if (editContactButton.value == 'save') {
-        console.log('saving contact');
         editImg.src = 'images/edit_icon.png';
         editContactButton.value = 'edit';
         SaveEditedContact(contact);
@@ -139,7 +138,21 @@ function SaveEditedContact(contact) {
 }
 
 function DeleteSelectedContact(contact) {
-    console.log("Delete");
+    const deleteButton = contact.querySelector('.delete-this-contact');
+    const deleteImg = contact.querySelector('.trash-icon');
+    const confirmText = contact.querySelector('.delete-confirm-text');
+
+    if (deleteButton.value == 'delete') {
+        console.log("Ask to confirm delete");
+        deleteButton.value = 'confirm';
+        deleteImg.src = 'images/confirm_delete_icon.png';
+        confirmText.classList.remove('no-display');
+        deleteButton.value = 'confirm';
+        selectedContact = contact;
+        return
+    }
+
+    console.log('delete');
 }
 
 const contacts = document.querySelectorAll('.contact-element');
