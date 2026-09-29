@@ -24,3 +24,22 @@ if ($method === 'GET') {
         respond(200, $contacts);
     }
 }
+
+if ($method === 'POST') {
+    if (isset($body['save'])) {
+        $firstName = clean($body['firstName']);
+        $lastName = clean($body['lastName']);
+        $email = cleans($body['email']);
+        $phone = clean($body['phone'])
+
+        $stmt = $db->prepare('  INSERT INTO Contacts (FirstName, LastName, Email, PhoneNumber, UserID)
+                                VALUES (:firstName, :lastName, :email, :phone, :userId)');
+		$stmt->execute([':firstName' => $firstName, ':lastName' => $lastName, ':email' => $email, 'phone' => $phone], 'userId' => $_SESSION['user_id']);
+		$contact = $stmt->fetch();
+
+        respond(200, [
+            'message' => 'Contact Saved'
+        ]);
+    }
+}
+
