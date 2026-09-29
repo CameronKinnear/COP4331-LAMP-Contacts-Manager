@@ -51,8 +51,23 @@
     width: 90%;
 }
 
+.contact-element {
+    transition: background-color 150ms ease;
+}
+
 .contact-element:hover {
     cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .contact-element:hover {
+        background-color: var(--light-brown);
+    }
+}
+
+.edit-this-contact,
+.delete-this-contact {
+    transition: opacity 150ms ease-out, visibility 150ms;
 }
 
 .select-this-contact {

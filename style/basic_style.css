@@ -16,8 +16,24 @@ button {
     border: 1px solid var(--dark-brown);
 }
 
-button:hover {
-    background-color: var(--dark-brown);
+button {
+    transition: background-color 150ms ease, transform 160ms ease-out;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    button:hover {
+        background-color: var(--dark-brown);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    button:active {
+        transform: none;
+    }
 }
 
 input {
@@ -59,6 +75,7 @@ input {
 
 .hidden {
     visibility: hidden;
+    opacity: 0;
 }
 
 .no-display {
