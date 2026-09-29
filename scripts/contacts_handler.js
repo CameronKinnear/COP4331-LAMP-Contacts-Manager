@@ -40,7 +40,7 @@ function LoadContacts() {
 //  ADD NEW CONTACT BUTTON, CREATES THEN ADDS TO DISPLAY THEN POSTS TO DATABASE
 //
 function AddNewContact() {
-    jsonTemp = {'ID' : -1, 'FirstName' : '[First]', 'LastName' : '[Last]',
+    jsonTemp = {'ID' : '-1', 'FirstName' : '[First]', 'LastName' : '[Last]',
                 'Email' : '[Email]', 'PhoneNumber' : '[Phone]'
     }
     const newContact = CreateContactElement(jsonTemp);
@@ -83,9 +83,10 @@ function CreateContactElement(contactInfo) {
     `;
 
     // Fill in the data
-    if (contactInfo.id != -1) {
+    if (contactInfo.ID != -1) {
         newElement.value = contactInfo.ID;
     }
+    
     newElement.querySelector('.contact-first-name').innerHTML = contactInfo.FirstName;
     newElement.querySelector('.contact-last-name').innerHTML = contactInfo.LastName;
     newElement.querySelector('.contact-email').innerHTML = contactInfo.Email;
