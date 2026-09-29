@@ -1,4 +1,5 @@
 let selectedContact = null;
+let searchDebounce = null;
 
 // CHECKS IF CONTACTS NEED TO BE LOADED ON HREF CHANGE
 //
@@ -10,26 +11,55 @@ if (document.readyState === "loading") {
 
 function InitContacts() {
     LoadContacts();
-    InitWidgetDragDrop();
+    SetupSearchBar();
+    if (typeof InitWidgetDragDrop === "function") {
+        InitWidgetDragDrop();
+    }
 }
 
+// Setup search bar listener (debounced 300ms)
+function SetupSearchBar() {
+    const searchBar = document.getElementById("contact-search-bar");
+    if (!searchBar) return;
+
+    searchBar.addEventListener("input", (e) => {
+        const query = e.target.value.trim();
+        clearTimeout(searchDebounce);
+        searchDebounce = setTimeout(() => {
+            LoadContacts(query);
+        }, 300);
+    });
+}
 //  LOADS THE CONTACTS ASSOCIATED WITH THE CURRENTLY LOGGED IN USER
 //  
-function LoadContacts() {
-    console.log("attempting contact fetch");
+function LoadContacts(query = "") {
+    console.log("attempting contact fetch", query);
 
-    fetch("api/contacts.php?contacts=1", { credentials: "same-origin" })
+    const contactDisplay = document.getElementById('contacts-display');
+    if (!contactDisplay) return;
+
+    // Use search endpoint if query is provided, otherwise default contacts fetch
+    const url = query.length > 0
+        ? `api/contacts.php?search=${encodeURIComponent(query)}`
+        : `api/contacts.php?contacts=1`;
+
+    fetch(url, { credentials: "same-origin" })
         .then(response => response.json())
         .then(data => {
+            contactDisplay.innerHTML = '';
+
             if (data.error && data.error.length > 0) {
                 console.log('data error', data.error);
-            } else {
-                console.log(data);
-                const contactDisplay = document.getElementById('contacts-display');
+                return;
+            }
+
+            if (Array.isArray(data) && data.length > 0) {
                 for (let i = 0; i < data.length; i++) {
                     let newContact = CreateContactElement(data[i]);
                     contactDisplay.appendChild(newContact);
                 }
+            } else if (query.length > 0) {
+                contactDisplay.innerHTML = `<div style="padding: 12px; color: #6e473b; font-size: 0.9rem;">No contacts found matching "${query}"</div>`;
             }
         })
         .catch(error => {
@@ -40,16 +70,17 @@ function LoadContacts() {
 //  ADD NEW CONTACT BUTTON, CREATES THEN ADDS TO DISPLAY THEN POSTS TO DATABASE
 //
 function AddNewContact() {
-    jsonTemp = {'FirstName' : '[First]', 'LastName' : '[Last]',
-                'Email' : '[Email]', 'PhoneNumber' : '[Phone]'
+    jsonTemp = {
+        'FirstName': '[First]', 'LastName': '[Last]',
+        'Email': '[Email]', 'PhoneNumber': '[Phone]'
     }
     const newContact = CreateContactElement(jsonTemp);
     document.getElementById('contacts-display').appendChild(newContact);
     PostContact(newContact);
-  
+
     // Open right-hand pane in edit mode
     EditSelectedContact(newContact);
-  
+
     // Automatically focus on the First Name input
     const contactfName = document.getElementById('selected-contact-first-name');
     if (contactfName) {
@@ -65,7 +96,11 @@ function CreateContactElement(contactInfo) {
     const newElement = document.createElement('div');
     newElement.className = 'contact-element';
 
-    // Template
+    // Store ID in dataset only if it exists and is valid
+    if (contactInfo && contactInfo.ID && contactInfo.ID != -1) {
+        newElement.dataset.id = contactInfo.ID;
+    }
+
     newElement.innerHTML = `
         <button class="select-this-contact button-nodesign" onclick="DisplaySelectedContact(this.parentElement)">
             <div class="contact-left">
@@ -78,7 +113,7 @@ function CreateContactElement(contactInfo) {
                 </div>
                 <div class="contact-bot">
                     <label class="contact-phone">${contactInfo.PhoneNumber || ''}</label>
-                    <label class="contact-email">${contactInfo.Email || ''}</label>
+                    <label class="contact-email" style="display: none;">${contactInfo.Email || ''}</label>
                 </div> 
             </div>           
         </button>
@@ -91,12 +126,6 @@ function CreateContactElement(contactInfo) {
         </button>
     `;
 
-    // Fill in the data
-    console.log(contactInfo.ID);
-    if (contactInfo.ID != -1) {
-        newElement.dataset.id = contactInfo.ID;
-    }
-  
     // Add mouse over functionality
     AddMouseOverFunctionality(newElement);
     return newElement;
@@ -120,17 +149,17 @@ function PostContact(contact) {
         },
         body: JSON.stringify(payload)
     })
-    .then(response => response.json().then(data => ({ status: response.status, body: data })))
-    .then(({ status, body }) => {
-        if (status >= 400 || body.error) {
-            
-        } else {
-            console.log(data.message);
-        }
-    })
-    .catch(err => {
-        
-    });
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(({ status, body }) => {
+            if (status >= 400 || body.error) {
+
+            } else {
+                console.log(data.message);
+            }
+        })
+        .catch(err => {
+
+        });
 }
 
 // COPIES DATA FROM THE CONTACTS COLUMN TO DISPLAY IN THE LARGE AREA
@@ -294,13 +323,44 @@ function SaveEditedContact(contact) {
     if (sidebarPhone) sidebarPhone.innerText = phonenumber;
     if (sidebarEmail) sidebarEmail.innerText = email;
 
+    const contactId = contact.dataset.id;
+
     let payload = {
-        save: true,
-        firstname: firstname,
+        id: contactId,
+        firstName: firstname,
         lastName: lastname,
         email: email,
         phone: phonenumber
     };
+
+    // If contact already has an ID, update with PUT; otherwise new entries use POST
+    const method = contactId ? "PUT" : "POST";
+    if (method === "POST") {
+        payload.save = true;
+    }
+
+    fetch("api/contacts.php", {
+        method: method,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(({ status, body }) => {
+            if (status >= 400 || body.error) {
+                console.error("Save error:", body.error);
+            } else {
+                console.log("Contact saved successfully:", body.message || body);
+                // If newly created, save the new DB ID to the element
+                if (body.id) {
+                    contact.dataset.id = body.id;
+                }
+            }
+        })
+        .catch(err => {
+            console.error("Network or script error on save:", err);
+        });
 }
 
 //  DELETES AN ALREADY EXISTING CONTACT FROM THE DATABASE

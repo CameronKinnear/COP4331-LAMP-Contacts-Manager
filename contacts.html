@@ -20,6 +20,7 @@
     </div>
 
     <div id="main-content">
+        <!-- 1. LEFT COLUMN -->
         <div id="contacts-column">
             <input type="text" id="contact-search-bar" placeholder="Enter Contact Name">
             <div id="search-bar-divider"></div>
@@ -37,34 +38,30 @@
                                 <label class="contact-first-name">Placeholder</label>
                                 <label class="contact-last-name">Name</label>
                             </div>
-                            <div class="contact-right">
-                                <div class="contact-top">
-                                    <label class="contact-first-name">Placeholder</label>
-                                    <label class="contact-last-name">Name</label>
-                                </div>
-                                <div class="contact-bot">
-                                    <label class="contact-phone no-display">123-456-7890</label>
-                                    <label class="contact-email">example@gmail.com</label>
-                                </div> 
-                            </div>           
-                        </button>
-                        <button class="edit-this-contact hidden" value="edit" onclick="EditSelectedContact(this.parentElement)">
-                            <img class="contact-change-icon edit-icon" src="images/edit_icon.png" alt="Edit">
-                        </button>
-                        <button class="delete-this-contact hidden" value="delete" onclick="DeleteSelectedContact(this.parentElement)">
-                            <span class="delete-confirm-text no-display">Confirm Deletion</span>
-                            <img class="contact-change-icon trash-icon" src="images/trash-icon.png" alt="Delete">
-                        </button>
-                    </div>
+                            <div class="contact-bot">
+                                <label class="contact-phone no-display">123-456-7890</label>
+                                <label class="contact-email">example@gmail.com</label>
+                            </div>
+                        </div>
+                    </button>
+                    <button class="edit-this-contact hidden" value="edit"
+                        onclick="EditSelectedContact(this.parentElement)">
+                        <img class="contact-change-icon edit-icon" src="images/edit_icon.png" alt="Edit">
+                    </button>
+                    <button class="delete-this-contact hidden" value="delete"
+                        onclick="DeleteSelectedContact(this.parentElement)">
+                        <span class="delete-confirm-text no-display">Confirm Deletion</span>
+                        <img class="contact-change-icon trash-icon" src="images/trash-icon.png" alt="Delete">
+                    </button>
                 </div>
             </div>
 
             <button id="add-new-contact-button" onclick="AddNewContact()">
                 <span class="text-medium">Add New Contact</span>
             </button>
-        </div>
+        </div><!-- END #contacts-column -->
 
-        <!-- Selected contact column -->
+        <!-- 2. RIGHT COLUMN (Now safely inside #main-content) -->
         <div id="selected-contact-column">
             <div id="selected-contact-header" class="hidden">
                 <div id="selected-contact-header-left">
@@ -97,14 +94,14 @@
                 </div>
             </div>
 
-            <!-- Widgets container (only one instance) -->
+            <!-- Widgets container -->
             <div id="selected-contact-widgets"></div>
 
             <div id="drag-widget-here-to-add" class="hidden">
                 <div class="plus-sign"></div>
             </div>
-        </div>
-    </div>
+        </div><!-- END #selected-contact-column -->
+    </div><!-- END #main-content -->
 
     <footer id="widgets">
         <div class="widget-box">
