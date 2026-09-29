@@ -31,7 +31,7 @@ if ($method === 'POST') {
     if (isset($body['save'])) {
         $firstName = clean($body['firstName']);
         $lastName = clean($body['lastName']);
-        $email = cleans($body['email']);
+        $email = clean($body['email']);
         $phone = clean($body['phone']);
 
         $stmt = $db->prepare('  INSERT INTO Contacts (FirstName, LastName, Email, PhoneNumber, UserID)
