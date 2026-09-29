@@ -40,7 +40,7 @@ function LoadContacts() {
 //  ADD NEW CONTACT BUTTON, CREATES THEN ADDS TO DISPLAY THEN POSTS TO DATABASE
 //
 function AddNewContact() {
-    jsonTemp = {'ID' : '-1', 'FirstName' : '[First]', 'LastName' : '[Last]',
+    jsonTemp = {'FirstName' : '[First]', 'LastName' : '[Last]',
                 'Email' : '[Email]', 'PhoneNumber' : '[Phone]'
     }
     const newContact = CreateContactElement(jsonTemp);
