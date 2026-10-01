@@ -22,7 +22,7 @@ function SetupSearchBar() {
     const searchBar = document.getElementById("contact-search-bar");
     if (!searchBar) return;
 
-    searchBar.addEventListener("input", (e) => {
+    searchBar.addEventListener("keydown", (e) => {
         const query = e.target.value.trim();
         clearTimeout(searchDebounce);
         searchDebounce = setTimeout(() => {
