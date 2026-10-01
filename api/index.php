@@ -1,198 +1,142 @@
 <?php
-// ============================================================
-//  api/index.php — Unified Colors Manager RESTful API
-//
-//  GET    /api/index.php?ping=1   — status ping health check
-//  POST   /api/index.php (login)  — authenticate user
-//  GET    /api/index.php          — list all colors for user
-//  GET    /api/index.php?q=term   — partial search colors
-//  GET    /api/index.php?id=1     — get single color by ID
-//  POST   /api/index.php (color)  — create new color
-//  PUT    /api/index.php?id=1     — update color by ID
-//  DELETE /api/index.php?id=1     — delete color by ID
-// ============================================================
+/*
+  api/index.php — Authentication API
+  GET  index.php?ping=1     health check (touches no database)
+  POST index.php            login
+       body: {"login","password"}
+  POST index.php            register (when "register" is true)
+       body: {"register":true,"login","password","firstName","lastName"}
+  POST index.php?logout=1   destroy the session
 
-require_once __DIR__ . '/config/db.php';
+  Contacts live in contacts.php, admin actions in admin.php.
+*/
+
 require_once __DIR__ . '/config/helpers.php';
+require_once __DIR__ . '/config/db.php';
 
 setCORSHeaders();
 
 $method = $_SERVER['REQUEST_METHOD'];
-$db     = getDB();
-$body   = getRequestBody();
 
-// 1. Unauthenticated Health Check (Ping)
-if ($method === 'GET' && (isset($_GET['ping']) || (isset($_GET['action']) && $_GET['action'] === 'ping'))) {
-	respond(200, ['status' => 'OK', 'timestamp' => time()]);
+// Ping answers before getDB(): if ping works but login 500s, the problem is the database.
+if ($method === 'GET' && (isset($_GET['ping']) || ($_GET['action'] ?? '') === 'ping')) {
+    respond(200, ['status' => 'OK', 'timestamp' => time()]);
 }
 
-if ($method === 'POST') {
-	// 2a. Login
-	if (isset($body['login']) && isset($body['password']) && !isset($body['register'])) {
-		$login    = clean($body['login']);
-		$password = clean($body['password']);
-
-		if (!$login || !$password) {
-			respond(400, ['error' => 'Login and password are required']);
-		}
-
-		$stmt = $db->prepare('SELECT ID, FirstName, LastName, Password FROM Users WHERE Login = :login LIMIT 1');
-		$stmt->execute([':login' => $login]);
-		$user = $stmt->fetch();
-
-		if ($user && password_verify($password, $user['Password'])) {
-			if (session_status() === PHP_SESSION_NONE) {
-				session_start();
-			}
-			session_regenerate_id(true);
-			$_SESSION['user_id'] = $user['ID'];
-
-			respond(200, [
-				'id' => (int) $user['ID'], 
-				'firstName' => $user['firstName'],
-				'lastName' => $user['lastName'], 
-				'token' => (string) $user['ID'], 
-				'error' => ''
-			]);
-		} else {
-			respond(401, ['id' => 0, 'firstName' => '', 'lastName' => '', 'error' => 'No Records Found']);
-		}
-	}
-	// 2b. Registration
-	if (isset($body['register']) && $body['register']) {
-		$login = clean($body['Login']);
-		$password = clean($body['Password']);
-		$first = clean($body['firstName'] ?? '');
-		$last = clean($body['lastName'] ?? '');
-
-		if (!$login || !$password) {
-			respond(400, ['error' => 'Username and password are required.']);
-		}
-
-		$check = $db->prepare('SELECT ID FROM Users WHERE Login = :login LIMIT 1');
-		$check->execute([':login' => $login]);
-		if ($check->fetch()) {
-			respond(409, ['error' => 'Username already taken.']);
-		}
-
-		$hash = password_hash($password, PASSWORD_DEFAULT);
-		$stmt = $db->prepare('INSERT INTO Users (Login, Password, FirstName, LastName) VALUES (:login, :pass, :first, :last)');
-		$stmt->execute([':login' => $login, ':pass' => $hash, ':first' => $first, ':last' => $last]);
-
-		respond(201, ['message' => 'User registered successfully']);
-	}
+if ($method !== 'POST') {
+    respond(405, ['error' => 'Method not allowed']);
 }
 
-// 3. All other routes require an authenticated user
-$userId = requireAuth();
+$db   = getDB();
+$body = getRequestBody();
 
-switch ($method) {
+if (isset($_GET['logout'])) {
+    logout();
+} elseif (!empty($body['register'])) {
+    register($db, $body);
+} else {
+    login($db, $body);
+}
 
-	// ── GET: search, list, or single color ──────────────────
-case 'GET':
-	$id     = isset($_GET['id']) ? (int) $_GET['id'] : null;
-	$search = isset($_GET['q'])  ? trim($_GET['q'])  : (isset($_GET['search']) ? trim($_GET['search']) : null);
+// ------------------------------------------------------------
+//  Session
+// ------------------------------------------------------------
+function startSession(): void {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_set_cookie_params([
+            'httponly' => true,
+            'samesite' => 'Lax',
+            'secure'   => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+        ]);
+        session_start();
+    }
+}
 
-	// Single color by ID
-	if ($id) {
-		$stmt = $db->prepare('SELECT ID as id, Name as name, UserID as user_id FROM Colors WHERE ID = :id AND UserID = :uid LIMIT 1');
-		$stmt->execute([':id' => $id, ':uid' => $userId]);
-		$color = $stmt->fetch();
-		if (!$color) {
-			respond(404, ['error' => 'Color not found']);
-		}
-		respond(200, $color);
-	}
+function logout(): void {
+    startSession();
+    $_SESSION = [];
+    $p = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000, $p['path'], $p['domain'], $p['secure'], $p['httponly']);
+    session_destroy();
+    respond(200, ['message' => 'Logged out', 'error' => '']);
+}
 
-	// Search colors (partial match)
-	if ($search !== null && $search !== '') {
-		$like = '%' . $search . '%';
-		$stmt = $db->prepare('SELECT ID as id, Name as name FROM Colors WHERE UserID = :uid AND Name LIKE :q ORDER BY Name');
-		$stmt->execute([':uid' => $userId, ':q' => $like]);
-		$rows = $stmt->fetchAll();
-		$results = array_column($rows, 'name');
-		if (empty($results)) {
-			respond(200, ['results' => [], 'colors' => [], 'error' => 'No Records Found']);
-		}
-		respond(200, ['results' => $results, 'colors' => $rows, 'error' => '']);
-	}
+// login functionality, password are only hashed and verified instead of using clean().
+function login(PDO $db, array $body): void {
+    $login    = clean($body['login'] ?? $body['Login'] ?? '');
+    $password = $body['password'] ?? $body['Password'] ?? '';
 
-	// List all colors
-	$stmt = $db->prepare('SELECT ID as id, Name as name FROM Colors WHERE UserID = :uid ORDER BY Name');
-	$stmt->execute([':uid' => $userId]);
-	$rows = $stmt->fetchAll();
-	$results = array_column($rows, 'name');
-	if (empty($results)) {
-		respond(200, ['results' => [], 'colors' => [], 'error' => 'No Records Found']);
-	}
-	respond(200, ['results' => $results, 'colors' => $rows, 'error' => '']);
-	break;
+    if ($login === '' || !is_string($password) || $password === '') {
+        respond(400, ['error' => 'Login and password are required']);
+    }
 
-	// ── POST: create color ───────────────────────────────────
-case 'POST':
-	$body  = getRequestBody();
-	$color = clean($body['color'] ?? $body['name'] ?? '');
-	if (!$color) {
-		respond(400, ['error' => 'Color name is required']);
-	}
+    $stmt = $db->prepare(
+        'SELECT ID, FirstName, LastName, Password, Role, IsActive
+         FROM Users WHERE Login = :login LIMIT 1'
+    );
+    $stmt->execute([':login' => $login]);
+    $user = $stmt->fetch();
 
-	$stmt = $db->prepare('INSERT INTO Colors (UserID, Name) VALUES (:uid, :name)');
-	$stmt->execute([':uid' => $userId, ':name' => $color]);
+    if (!$user || !password_verify($password, $user['Password'])) {
+        respond(401, ['id' => 0, 'firstName' => '', 'lastName' => '', 'error' => 'No Records Found']);
+    }
 
-	respond(201, [
-		'message' => 'Color created',
-		'id'      => (int) $db->lastInsertId(),
-		'error'   => ''
-	]);
-	break;
+    // Checked only after the password is proven, so strangers can't probe which accounts are disabled.
+    if (!(int) $user['IsActive']) {
+        respond(403, ['id' => 0, 'firstName' => '', 'lastName' => '', 'error' => 'Account disabled']);
+    }
 
-	// ── PUT: update color ─────────────────────────────────────
-case 'PUT':
-	$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-	if (!$id) {
-		respond(400, ['error' => 'Color ID is required — use ?id=']);
-	}
+    startSession();
+    session_regenerate_id(true);
+    $_SESSION['user_id'] = (int) $user['ID'];
 
-	$check = $db->prepare('SELECT ID FROM Colors WHERE ID = :id AND UserID = :uid LIMIT 1');
-	$check->execute([':id' => $id, ':uid' => $userId]);
-	if (!$check->fetch()) {
-		respond(404, ['error' => 'Color not found']);
-	}
+    respond(200, [
+        'id'        => (int) $user['ID'],
+        'firstName' => $user['FirstName'],
+        'lastName'  => $user['LastName'],
+        'role'      => $user['Role'],
+        'error'     => ''
+    ]);
+}
+// Register: creates a regular user. Admins are made through admin.php.
+function register(PDO $db, array $body): void {
+    $login     = clean($body['login'] ?? $body['Login'] ?? '');
+    $password  = $body['password'] ?? $body['Password'] ?? '';
+    $firstName = clean($body['firstName'] ?? $body['FirstName'] ?? '');
+    $lastName  = clean($body['lastName'] ?? $body['LastName'] ?? '');
 
-	$body  = getRequestBody();
-	$color = clean($body['color'] ?? $body['name'] ?? '');
-	if (!$color) {
-		respond(400, ['error' => 'Color name is required']);
-	}
+    if ($login === '' || !is_string($password) || trim($password) === '') {
+        respond(400, ['error' => 'Username and password are required.']);
+    }
+    if (mb_strlen($login) > 50 || mb_strlen($firstName) > 50 || mb_strlen($lastName) > 50) {
+        respond(400, ['error' => 'Username and names must be 50 characters or fewer.']);
+    }
 
-	$stmt = $db->prepare('UPDATE Colors SET Name = :name WHERE ID = :id AND UserID = :uid');
-	$stmt->execute([':name' => $color, ':id' => $id, ':uid' => $userId]);
+    $check = $db->prepare('SELECT ID FROM Users WHERE Login = :login LIMIT 1');
+    $check->execute([':login' => $login]);
+    if ($check->fetch()) {
+        respond(409, ['error' => 'Username already taken.']);
+    }
 
-	respond(200, ['message' => 'Color updated', 'error' => '']);
-	break;
+    try {
+        $stmt = $db->prepare(
+            'INSERT INTO Users (Login, Password, FirstName, LastName)
+             VALUES (:login, :pass, :first, :last)'
+        );
+        $stmt->execute([
+            ':login' => $login,
+            ':pass'  => password_hash($password, PASSWORD_DEFAULT),
+            ':first' => $firstName,
+            ':last'  => $lastName,
+        ]);
+    } catch (PDOException $e) {
+        // 1062 = duplicate key: two signups raced past the check above (needs a UNIQUE index on Login).
+        if (($e->errorInfo[1] ?? 0) === 1062) {
+            respond(409, ['error' => 'Username already taken.']);
+        }
+        error_log('register: ' . $e->getMessage());
+        respond(500, ['error' => 'Server error']);
+    }
 
-	// ── DELETE: delete color ──────────────────────────────────
-case 'DELETE':
-	$id   = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-	$name = isset($_GET['name']) ? clean($_GET['name']) : '';
-
-	if ($id > 0) {
-		$stmt = $db->prepare('DELETE FROM Colors WHERE ID = :id AND UserID = :uid');
-		$stmt->execute([':id' => $id, ':uid' => $userId]);
-	} elseif ($name !== '') {
-		$stmt = $db->prepare('DELETE FROM Colors WHERE Name = :name AND UserID = :uid LIMIT 1');
-		$stmt->execute([':name' => $name, ':uid' => $userId]);
-	} else {
-		respond(400, ['error' => 'Color ID or Name is required — use ?id= or ?name=']);
-	}
-
-	if ($stmt->rowCount() === 0) {
-		respond(404, ['error' => 'Color not found']);
-	}
-
-	respond(200, ['message' => 'Color deleted', 'error' => '']);
-	break;
-
-default:
-	respond(405, ['error' => 'Method not allowed']);
+    respond(201, ['message' => 'User registered successfully', 'error' => '']);
 }
