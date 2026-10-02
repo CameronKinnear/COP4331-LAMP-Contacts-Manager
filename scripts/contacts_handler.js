@@ -366,6 +366,7 @@ function SaveEditedContact(contact) {
 //  DELETES AN ALREADY EXISTING CONTACT FROM THE DATABASE
 //
 function DeleteSelectedContact(contact) {
+    console.log('running delete contact func');
     const deleteButton = contact.querySelector('.delete-this-contact');
     const deleteImg = contact.querySelector('.trash-icon');
     const confirmText = contact.querySelector('.delete-confirm-text');
@@ -382,7 +383,7 @@ function DeleteSelectedContact(contact) {
     const contactHeader = document.getElementById('selected-contact-header');
     if (contactHeader) contactHeader.classList.add('hidden');
 
-    let contactId = selectedContact.dataset.id;
+    let contactId = contact.dataset.id;
     // !! STILL NEEDS PROPER DATABASE DELETION
     console.log('attemtping delete contact');
     fetch("api/contacts.php?contactId" + contactId, {
