@@ -1,0 +1,35 @@
+meta {
+  name: Update Contact
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}{{apiPath}}/contacts.php
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "id": {{contactId}},
+    "firstName": "Bruno",
+    "lastName": "Updated",
+    "email": "bruno.updated@example.test",
+    "phone": "555-0101"
+  }
+}
+
+vars:pre-request {
+  baseUrl: https://goliveira.site
+  apiPath: /api
+}
+
+assert {
+  res.status: 200
+  res.body.message: "Contact Updated"
+}

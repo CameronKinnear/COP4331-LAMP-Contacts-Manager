@@ -1,0 +1,40 @@
+meta {
+  name: Create Contact
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}{{apiPath}}/contacts.php
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "save": true,
+    "firstName": "Bruno",
+    "lastName": "Runner",
+    "email": "bruno.runner@example.test",
+    "phone": "555-0100"
+  }
+}
+
+vars:pre-request {
+  baseUrl: https://goliveira.site
+  apiPath: /api
+}
+
+assert {
+  res.status: 200
+  res.body.message: "Contact Saved"
+  res.body.id: isNumber
+}
+
+script:post-response {
+  bru.setVar("contactId", res.getBody().id);
+}

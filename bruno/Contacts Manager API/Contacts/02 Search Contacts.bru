@@ -1,0 +1,22 @@
+meta {
+  name: Search Contacts
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}{{apiPath}}/contacts.php?search={{searchTerm}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  baseUrl: https://goliveira.site
+  apiPath: /api
+  searchTerm: Rick
+}
+
+assert {
+  res.status: 200
+  res.body: isArray
+}

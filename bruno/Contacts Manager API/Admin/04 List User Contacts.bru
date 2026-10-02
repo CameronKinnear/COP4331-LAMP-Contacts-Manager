@@ -1,0 +1,30 @@
+meta {
+  name: List User Contacts
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}{{apiPath}}/admin.php?resource=contacts&userId={{adminUserId}}&password={{adminPassword}}
+  body: none
+  auth: none
+}
+
+params:query {
+  resource: contacts
+  userId: {{adminUserId}}
+  password: {{adminPassword}}
+}
+
+vars:pre-request {
+  baseUrl: https://goliveira.site
+  apiPath: /api
+  adminUserId: root
+  adminUserPassword: YLamp@Developers!
+  adminPassword: YLamp@Developers!
+}
+
+assert {
+  res.status: 200
+  res.body.contacts: isArray
+}

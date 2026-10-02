@@ -1,0 +1,21 @@
+meta {
+  name: Search Users
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}{{apiPath}}/admin.php?resource=users&q={{testLogin}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  baseUrl: https://goliveira.site
+  apiPath: /api
+}
+
+assert {
+  res.status: 200
+  res.body.users: isArray
+}
