@@ -78,8 +78,6 @@ function requireAdmin(PDO $db): int {
     return $userId;
 }
 
-const USER_COLUMNS = 'ID, FirstName, LastName, Login, Role, IsActive';
-
 function publicUser(array $row): array {
     return [
         'id'        => (int) $row['ID'],
@@ -90,6 +88,15 @@ function publicUser(array $row): array {
         'active'    => (bool) $row['IsActive'],
     ];
 }
+
+function textLength(string $value): int {
+    if (function_exists('mb_strlen')) {
+        return mb_strlen($value, 'UTF-8');
+    }
+    $count = preg_match_all('/./us', $value, $matches);
+    return $count === false ? strlen($value) : $count;
+}
+
 // fix special character collision.
 function likeTerm(string $s): string {
     return '%' . addcslashes($s, '%_\\') . '%';
@@ -106,7 +113,7 @@ function listUsers(PDO $db): void {
     [$limit, $offset] = pageParams();
     $q = trim($_GET['q'] ?? '');
 
-    $sql = 'SELECT ' . USER_COLUMNS . ' FROM Users';
+    $sql = 'SELECT ID, FirstName, LastName, Login, Role, IsActive FROM Users';
     if ($q !== '') {
         $sql .= " WHERE CONCAT_WS(' ', FirstName, LastName, Login) LIKE :q";
     }
@@ -125,7 +132,7 @@ function listUsers(PDO $db): void {
 
 // retrieves user.
 function getUser(PDO $db, int $id): void {
-    $stmt = $db->prepare('SELECT ' . USER_COLUMNS . ' FROM Users WHERE ID = :id LIMIT 1');
+    $stmt = $db->prepare('SELECT ID, FirstName, LastName, Login, Role, IsActive FROM Users WHERE ID = :id LIMIT 1');
     $stmt->execute([':id' => $id]);
     $row = $stmt->fetch();
 
@@ -146,7 +153,7 @@ function createAdmin(PDO $db): void {
     if ($login === '' || !is_string($password) || trim($password) === '') {
         respond(400, ['error' => 'Login and password are required']);
     }
-    if (mb_strlen($login) > 50 || mb_strlen($firstName) > 50 || mb_strlen($lastName) > 50) {
+    if (textLength($login) > 50 || textLength($firstName) > 50 || textLength($lastName) > 50) {
         respond(400, ['error' => 'Login and names must be 50 characters or fewer']);
     }
 
