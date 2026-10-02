@@ -110,3 +110,20 @@ if ($method === 'PUT') {
 
     respond(200, ['message' => 'Contact Updated']);
 }
+
+if ($method === 'DELETE') {
+    if (isset($_GET['id'])) {
+        // Is deleting a contact
+
+        $id = intval($_GET['id']);
+
+        $stmt = $db->prepare('
+            DELETE FROM Contacts
+            WHERE ID = :id')
+        $stmt->execute([':id' => $id]);
+
+        respond(200, [
+            'message' => 'Contacts Deleted'
+        ]);
+    }
+}

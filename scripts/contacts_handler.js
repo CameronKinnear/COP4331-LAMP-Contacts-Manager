@@ -383,7 +383,26 @@ function DeleteSelectedContact(contact) {
     const contactHeader = document.getElementById('selected-contact-header');
     if (contactHeader) contactHeader.classList.add('hidden');
 
+    let contactId = selectedContact.dataset.id;
     // !! STILL NEEDS PROPER DATABASE DELETION
+    fetch("api/contacts.php?id=${contactId}", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(({ status, body }) => {
+            if (status >= 400 || body.error) {
+
+            } else {
+                console.log(data.message);
+            }
+        })
+        .catch(err => {
+
+        });
 }
 
 // ADDS MOUSE OVER FUNCTIONAILITY TO ALL CONTACTS AS SOON AS PAGE LOADS
