@@ -391,7 +391,6 @@ function DeleteSelectedContact(contact) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(payload)
     })
     .then(response => response.json().then(data => ({ status: response.status, body: data })))
     .then(({ status, body }) => {
