@@ -119,7 +119,8 @@ if ($method === 'DELETE') {
 
         $stmt = $db->prepare('
             DELETE FROM Contacts
-            WHERE ID = :id')
+            WHERE ID = :id');
+            
         $stmt->execute([':id' => $id]);
 
         respond(200, [
