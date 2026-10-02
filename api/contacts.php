@@ -112,7 +112,7 @@ if ($method === 'PUT') {
 }
 
 if ($method === 'DELETE') {
-    if (isset($_GET['id'])) {
+    if (isset($_GET['contactId'])) {
         // Is deleting a contact
 
         $id = intval($_GET['id']);
@@ -120,7 +120,7 @@ if ($method === 'DELETE') {
         $stmt = $db->prepare('
             DELETE FROM Contacts
             WHERE ID = :id');
-            
+
         $stmt->execute([':id' => $id]);
 
         respond(200, [

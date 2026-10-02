@@ -385,7 +385,8 @@ function DeleteSelectedContact(contact) {
 
     let contactId = selectedContact.dataset.id;
     // !! STILL NEEDS PROPER DATABASE DELETION
-    fetch("api/contacts.php?id=${contactId}", {
+    console.log('attemtping delete contact');
+    fetch("api/contacts.php?contactId" + contactId, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json"
