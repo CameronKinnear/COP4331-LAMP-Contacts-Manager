@@ -379,7 +379,6 @@ function DeleteSelectedContact(contact) {
     }
 
     // Confirm deletion logic
-    contact.remove();
     const contactHeader = document.getElementById('selected-contact-header');
     if (contactHeader) contactHeader.classList.add('hidden');
 
@@ -393,17 +392,19 @@ function DeleteSelectedContact(contact) {
         },
         body: JSON.stringify(payload)
     })
-        .then(response => response.json().then(data => ({ status: response.status, body: data })))
-        .then(({ status, body }) => {
-            if (status >= 400 || body.error) {
+    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+    .then(({ status, body }) => {
+        if (status >= 400 || body.error) {
 
-            } else {
-                console.log(data.message);
-            }
-        })
-        .catch(err => {
+        } else {
+            console.log(data.message);
+        }
+    })
+    .catch(err => {
 
-        });
+    });
+
+    contact.remove();
 }
 
 // ADDS MOUSE OVER FUNCTIONAILITY TO ALL CONTACTS AS SOON AS PAGE LOADS
