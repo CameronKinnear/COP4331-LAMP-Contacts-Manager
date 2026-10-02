@@ -1,0 +1,32 @@
+meta {
+  name: Admin Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}{{apiPath}}/index.php
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "login": "{{adminLogin}}",
+    "password": "{{adminPassword}}"
+  }
+}
+
+vars:pre-request {
+  baseUrl: https://goliveira.site
+  apiPath: /api
+}
+
+assert {
+  res.status: 200
+  res.body.role: "admin"
+}

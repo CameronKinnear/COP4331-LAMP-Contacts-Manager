@@ -1,0 +1,21 @@
+meta {
+  name: List Users
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}{{apiPath}}/admin.php?resource=users&limit=20
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  baseUrl: https://goliveira.site
+  apiPath: /api
+}
+
+assert {
+  res.status: 200
+  res.body.users: isArray
+}

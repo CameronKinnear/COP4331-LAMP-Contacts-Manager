@@ -1,0 +1,21 @@
+meta {
+  name: List Contacts
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}{{apiPath}}/contacts.php?contacts=1
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  baseUrl: https://goliveira.site
+  apiPath: /api
+}
+
+assert {
+  res.status: 200
+  res.body: isArray
+}
