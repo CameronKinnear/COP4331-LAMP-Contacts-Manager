@@ -16,6 +16,7 @@ if (document.readyState === "loading") {
 //
 function DisplayFirstAndLastName() {
     let nameHeader = document.getElementById('user-name');
-    let usersName = window.sessionStorage.getItem('firstName') + ' ' + window.sessionStorage.getItem('lastName');
+    let usersName = (window.sessionStorage.getItem('firstName') ?? '[First Name Error]') + ' ' + 
+                    (window.sessionStorage.getItem('lastName') ?? '[Last Name Error]');
     nameHeader.innerHTML = usersName;
 }

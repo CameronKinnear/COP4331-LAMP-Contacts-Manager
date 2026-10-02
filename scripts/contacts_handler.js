@@ -382,6 +382,8 @@ function DeleteSelectedContact(contact) {
     contact.remove();
     const contactHeader = document.getElementById('selected-contact-header');
     if (contactHeader) contactHeader.classList.add('hidden');
+
+    // !! STILL NEEDS PROPER DATABASE DELETION
 }
 
 // ADDS MOUSE OVER FUNCTIONAILITY TO ALL CONTACTS AS SOON AS PAGE LOADS
