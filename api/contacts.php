@@ -115,7 +115,7 @@ if ($method === 'DELETE') {
     if (isset($_GET['contactId'])) {
         // Is deleting a contact
 
-        $id = intval($_GET['id']);
+        $id = intval($_GET['contactId']);
 
         $stmt = $db->prepare('
             DELETE FROM Contacts
