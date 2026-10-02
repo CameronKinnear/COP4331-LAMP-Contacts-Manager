@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - BrownBook</title>
+    <link rel="icon" type="image/png" href="images/brownbook_logo.png">
+    <link rel="stylesheet" href="style/basic_style.css">
+    <link rel="stylesheet" href="style/admin.css">
+    <script src="scripts/admin.js" defer></script>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="brand">
+            <img src="images/brownbook_logo.png" alt="BrownBook logo">
+            <div><h1>BrownBook</h1><span class="subtitle">Admin Console</span></div>
+        </div>
+        <div class="header-actions">
+            <p>Hello, <span id="admin-name"></span>!</p>
+            <button id="logout-button" type="button">Log out</button>
+        </div>
+    </header>
+
+    <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
+
+    <main class="admin-main">
+        <section class="panel" aria-labelledby="users-heading">
+            <div class="section-heading">
+                <div><p class="eyebrow">Account management</p><h2 id="users-heading">Users</h2></div>
+                <label class="search-control" for="user-search-bar">Search users
+                    <input id="user-search-bar" type="search" placeholder="Search users by name or username" autocomplete="off">
+                </label>
+                <button id="user-search-clear" class="secondary-button" type="button">Clear</button>
+            </div>
+            <div class="table-wrap">
+                <table id="users-table" aria-label="BrownBook user accounts">
+                    <thead><tr><th scope="col">ID</th><th scope="col">Name</th><th scope="col">Username</th><th scope="col">Role</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
+                    <tbody id="users-table-body"></tbody>
+                </table>
+                <p id="users-loading" class="table-message" hidden>Loading users…</p>
+                <p id="users-empty" class="table-message" hidden>No users found</p>
+            </div>
+            <div class="pagination"><span id="page-info">Page 1</span><div><button id="page-prev" class="secondary-button" type="button">Previous</button><button id="page-next" class="secondary-button" type="button">Next</button></div></div>
+        </section>
+
+        <details class="panel create-panel">
+            <summary><span><span class="eyebrow">Administration</span><strong>Create another admin</strong></span><span aria-hidden="true">＋</span></summary>
+            <form id="create-admin-form" class="admin-form">
+                <label for="new-admin-first">First name<input id="new-admin-first" name="firstName" type="text" maxlength="50" autocomplete="given-name"></label>
+                <label for="new-admin-last">Last name<input id="new-admin-last" name="lastName" type="text" maxlength="50" autocomplete="family-name"></label>
+                <label for="new-admin-login">Username<input id="new-admin-login" name="login" type="text" maxlength="50" required autocomplete="username"></label>
+                <label for="new-admin-password">Password<input id="new-admin-password" name="password" type="password" required autocomplete="new-password"></label>
+                <button type="submit">Create admin</button>
+            </form>
+        </details>
+
+        <section id="contacts-panel" class="panel hidden" aria-labelledby="contacts-heading">
+            <div class="section-heading">
+                <h2 id="contacts-heading">Contacts for <span id="contacts-owner"></span></h2>
+                <label class="search-control" for="admin-contact-search">Search contacts<input id="admin-contact-search" type="search" placeholder="Search this user's contacts" autocomplete="off"></label>
+                <button id="contacts-close" class="secondary-button" type="button">Close</button>
+            </div>
+            <div class="table-wrap"><table aria-label="Read-only user contacts"><thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Phone</th></tr></thead><tbody id="admin-contacts-body"></tbody></table><p id="contacts-empty" class="table-message" hidden>No contacts found</p></div>
+        </section>
+    </main>
+</body>
+</html>
