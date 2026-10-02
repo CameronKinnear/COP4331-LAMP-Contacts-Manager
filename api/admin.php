@@ -1,4 +1,5 @@
 <?php
+/*
 api/admin.php — Admin-only user management
 
 Every request must come from a logged-in, active admin.
@@ -14,6 +15,7 @@ PUT  admin.php?resource=users&id=N             change password and/or active sta
 GET  admin.php?resource=contacts&userId=N      one user's contacts (?q= filters)
 GET  admin.php?resource=contacts&q=term        search everyone's contacts
      (at least one of userId / q is required; results are paged)
+*/
 
 require_once __DIR__ . '/config/helpers.php';
 require_once __DIR__ . '/config/db.php';
