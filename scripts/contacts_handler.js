@@ -407,20 +407,29 @@ function SaveEditedContact(contact) {
         },
         body: JSON.stringify(payload)
     })
-        .then(response => response.json().then(data => ({ status: response.status, body: data })))
-        .then(({ status, body }) => {
-            if (status >= 400 || body.error) {
-                console.error("Save error:", body.error);
-            } else {
-                console.log("Contact saved successfully:", body.message || body);
-                // If newly created, save the new DB ID to the element
-                if (body.id) {
-                    contact.dataset.id = body.id;
-                }
+        .then(async response => {
+            const responseText = await response.text();
+            let body;
+            try {
+                body = JSON.parse(responseText);
+            } catch (error) {
+                throw new Error(`Server returned an invalid response (HTTP ${response.status}).`);
             }
+            if (!response.ok || body.error) {
+                throw new Error(body.error || `Save failed (HTTP ${response.status}).`);
+            }
+            return body;
+        })
+        .then(body => {
+            contact.classList.remove('contact-save-failed');
+            console.log("Contact saved successfully:", body.message || body);
+            // If newly created, save the new DB ID to the element
+            if (body.id) contact.dataset.id = body.id;
         })
         .catch(err => {
             console.error("Network or script error on save:", err);
+            contact.classList.add('contact-save-failed');
+            alert(`Contact was not saved. ${err.message || "Check your connection and try again."}`);
         });
 }
 
