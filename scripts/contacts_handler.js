@@ -22,7 +22,7 @@ function SetupSearchBar() {
     const searchBar = document.getElementById("contact-search-bar");
     if (!searchBar) return;
 
-    searchBar.addEventListener("input", (e) => {
+    searchBar.addEventListener("keydown", (e) => {
         const query = e.target.value.trim();
         clearTimeout(searchDebounce);
         searchDebounce = setTimeout(() => {
@@ -366,6 +366,7 @@ function SaveEditedContact(contact) {
 //  DELETES AN ALREADY EXISTING CONTACT FROM THE DATABASE
 //
 function DeleteSelectedContact(contact) {
+    console.log('running delete contact func');
     const deleteButton = contact.querySelector('.delete-this-contact');
     const deleteImg = contact.querySelector('.trash-icon');
     const confirmText = contact.querySelector('.delete-confirm-text');
@@ -379,9 +380,31 @@ function DeleteSelectedContact(contact) {
     }
 
     // Confirm deletion logic
-    contact.remove();
     const contactHeader = document.getElementById('selected-contact-header');
     if (contactHeader) contactHeader.classList.add('hidden');
+
+    let contactId = contact.dataset.id;
+    // !! STILL NEEDS PROPER DATABASE DELETION
+    console.log('attemtping delete contact');
+    fetch("api/contacts.php?contactId=" + contactId, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    })
+    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+    .then(({ status, body }) => {
+        if (status >= 400 || body.error) {
+
+        } else {
+            console.log(data.message);
+        }
+    })
+    .catch(err => {
+
+    });
+
+    contact.remove();
 }
 
 // ADDS MOUSE OVER FUNCTIONAILITY TO ALL CONTACTS AS SOON AS PAGE LOADS

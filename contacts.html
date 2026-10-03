@@ -54,10 +54,10 @@
                         <img class="contact-change-icon trash-icon" src="images/trash-icon.png" alt="Delete">
                     </button>
                 </div>
-                <button id="add-new-contact-button" onclick="AddNewContact()">
-                    <span class="text-medium">Add New Contact</span>
-                </button>
-          </div><!-- END #contacts-column -->
+            </div><!-- END #contacts-column -->
+            <button id="add-new-contact-button" onclick="AddNewContact()">
+                <span class="text-medium">Add New Contact</span>
+            </button>
         </div>
         <!-- 2. RIGHT COLUMN (Now safely inside #main-content) -->
         <div id="selected-contact-column">
@@ -93,7 +93,7 @@
             </div>
 
             <!-- Widgets container -->
-            <div id="selected-contact-widgets"></div>
+            <div id="selected-contact-widgets" class="no-display"></div>
 
             <div id="drag-widget-here-to-add" class="hidden">
                 <div class="plus-sign"></div>
@@ -101,7 +101,7 @@
         </div><!-- END #selected-contact-column -->
     </div><!-- END #main-content -->
 
-    <footer id="widgets">
+    <footer id="widgets" class="no-display">
         <div class="widget-box">
             <div id="widget-note" class="draggable-widget" draggable="true"></div>
             <label class="widget-label">Note</label>
@@ -109,6 +109,7 @@
     </footer>
 
     <script src="scripts/contacts_handler.js" defer></script>
+    <script src="scripts/contacts_basic.js" defer></script>
 </body>
 
 </html>
