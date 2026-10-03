@@ -33,8 +33,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify(payload)
             })
-                .then(response => response.json())
+                .then(async response => {
+                    const responseText = await response.text();
+                    let data;
+                    try {
+                        data = JSON.parse(responseText);
+                    } catch (error) {
+                        console.error("Registration returned a non-JSON response:", response.status, responseText);
+                        throw new Error(`The server returned an unexpected response (HTTP ${response.status}).`);
+                    }
+                    if (!response.ok) {
+                        console.error("Registration failed:", response.status, data);
+                        alert(`Registration failed (HTTP ${response.status}): ${data.error || "Please try again."}`);
+                        return null;
+                    }
+                    return data;
+                })
                 .then(data => {
+                    if (data === null) return;
                     if (data.error && data.error.length > 0) {
                         alert("Registration failed: " + data.error);
                     } else {
@@ -44,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 })
                 .catch(error => {
                     console.error("Error submitting registration:", error);
-                    alert("An error occurred during registration. Please check the console.");
+                    alert(`Registration could not be completed. ${error.message || "Check your connection and try again."}`);
                 });
         });
     }
