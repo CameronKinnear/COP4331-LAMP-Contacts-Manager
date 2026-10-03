@@ -40,7 +40,7 @@ body {
 }
 
 #header-bar { display: flex; align-items: center; padding: 8px 16px; }
-#header-name { margin-right: auto; }
+#header-name { margin-right: auto;}
 .header-link { display: inline-block; padding: 8px 12px; border: 1px solid var(--dark-brown); border-radius: 6px; background: var(--brown); color: var(--cream); text-decoration: none; font-weight: 600; }
 .header-link:hover { background: var(--dark-brown); }
 
@@ -355,7 +355,26 @@ button:hover {
 }
 
 #dark-mode-toggle {
-    background-color: white;
+    background-color: var(--light-brown);
+    display: flex;
+    flex-direction: row;
+    border-radius: 5px;
+    align-items: center;
+    height: 20px;
+    padding: 5px;
     color: #2b1d0c;
     border-color: black;
+}
+
+h1 {
+    color: var(--light-brown);
+}
+
+#header-bar-right {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    margin-left: auto;
+    align-items: center;
+    gap: 20px;
 }
