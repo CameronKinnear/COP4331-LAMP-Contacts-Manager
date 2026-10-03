@@ -55,8 +55,11 @@ function AttemptLogin() {
             if (body.lastName || body.LastName) {
                 sessionStorage.setItem("lastName", body.lastName || body.LastName);
             }
+            if (body.role) {
+                sessionStorage.setItem("role", body.role);
+            }
 
-            window.location.href = 'contacts.html';
+            window.location.href = body.role === 'admin' ? 'admin.html' : 'contacts.html';
         }
     })
     .catch(err => {
