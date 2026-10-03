@@ -108,17 +108,17 @@ function register(PDO $db, array $body): void {
     if ($login === '' || !is_string($password) || trim($password) === '') {
         respond(400, ['error' => 'Username and password are required.']);
     }
-    if (mb_strlen($login) > 50 || mb_strlen($firstName) > 50 || mb_strlen($lastName) > 50) {
-        respond(400, ['error' => 'Username and names must be 50 characters or fewer.']);
-    }
-
-    $check = $db->prepare('SELECT ID FROM Users WHERE Login = :login LIMIT 1');
-    $check->execute([':login' => $login]);
-    if ($check->fetch()) {
-        respond(409, ['error' => 'Username already taken.']);
-    }
-
     try {
+        if (textLength($login) > 50 || textLength($firstName) > 50 || textLength($lastName) > 50) {
+            respond(400, ['error' => 'Username and names must be 50 characters or fewer.']);
+        }
+
+        $check = $db->prepare('SELECT ID FROM Users WHERE Login = :login LIMIT 1');
+        $check->execute([':login' => $login]);
+        if ($check->fetch()) {
+            respond(409, ['error' => 'Username already taken.']);
+        }
+
         $stmt = $db->prepare(
             'INSERT INTO Users (Login, Password, FirstName, LastName)
              VALUES (:login, :pass, :first, :last)'
@@ -139,4 +139,12 @@ function register(PDO $db, array $body): void {
     }
 
     respond(201, ['message' => 'User registered successfully', 'error' => '']);
+}
+
+function textLength(string $value): int {
+    if (function_exists('mb_strlen')) {
+        return mb_strlen($value, 'UTF-8');
+    }
+    $count = preg_match_all('/./us', $value, $matches);
+    return $count === false ? strlen($value) : $count;
 }
