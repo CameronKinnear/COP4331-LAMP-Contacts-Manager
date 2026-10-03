@@ -20,7 +20,23 @@ function InitContacts() {
 
 function SetupCategoryInput() {
     const categorySelect = document.getElementById('selected-contact-category');
-    if (categorySelect) categorySelect.addEventListener('change', UpdateCustomCategoryVisibility);
+    const customInput = document.getElementById('selected-contact-custom-category');
+    if (categorySelect?.dataset.categoryHandlerBound) return;
+    if (categorySelect) categorySelect.dataset.categoryHandlerBound = 'true';
+    if (categorySelect) {
+        categorySelect.addEventListener('change', () => {
+            UpdateCustomCategoryVisibility();
+            SaveDisplayedCategoryIfNeeded();
+        });
+    }
+    if (customInput) customInput.addEventListener('change', SaveDisplayedCategoryIfNeeded);
+}
+
+function SaveDisplayedCategoryIfNeeded() {
+    if (!selectedContact || !selectedContact.dataset.id) return;
+    const editButton = selectedContact.querySelector('.edit-this-contact');
+    if (editButton && editButton.value === 'save') return;
+    SaveEditedContact(selectedContact);
 }
 
 function UpdateCustomCategoryVisibility() {
@@ -236,7 +252,9 @@ function DisplaySelectedContact(contact) {
         contactEmailInput.classList.add('disabled-input');
     }
 
-    SetCategoryField(category ? category.dataset.category || '' : '', false);
+    // Category can be changed directly from the selected contact view; other fields
+    // continue to use the card's edit/save action.
+    SetCategoryField(category ? category.dataset.category || '' : '', true);
 
     selectedContact = contact;
 }
