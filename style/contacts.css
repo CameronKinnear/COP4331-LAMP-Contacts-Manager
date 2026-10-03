@@ -44,7 +44,9 @@
 .contact-element {
     display: flex;
     flex-direction: row;
-    min-height: 68px;
+    height: 72px;
+    min-height: 72px;
+    box-sizing: border-box;
     margin-top: 10px;
     margin-left: 5%;
     border: 2px solid var(--dark-brown);
@@ -72,7 +74,7 @@
 }
 
 .select-this-contact {
-    height: inherit;
+    height: 100%;
     display: flex;
     width: auto;
     flex: 1;
@@ -81,7 +83,7 @@
 
 .edit-this-contact {
     width: 50px;
-    height: inherit;
+    height: 100%;
     margin-left: auto;
     background-color: var(--blue);
     padding: 0;
@@ -111,7 +113,10 @@
 }
 
 .contact-icon {
-    height: 95%;
+    width: 44px;
+    height: 44px;
+    max-width: 44px;
+    object-fit: cover;
 }
 
 .contact-left {
@@ -123,27 +128,34 @@
     padding-left: 5px;
     display: inherit;
     flex-direction: column;
-    justify-content: center;
 }
 
 .contact-top {
     display: inherit;
     flex-direction: row;
-    height: 50%;
     align-items: center;
 }
 
 .contact-bot {
     display: inherit;
     flex-direction: row;
-    height: 50%;
     align-items: center;
+}
+
+.contact-right {
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
 }
 
 .contact-category {
     color: #f8eee2;
     font-size: 0.72rem;
     line-height: 1.1;
+}
+
+.contact-element .contact-category:empty {
+    display: none;
 }
 
 .contact-first-name {
