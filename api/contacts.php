@@ -28,7 +28,7 @@ if ($method === 'GET') {
         $stmt = $db->prepare('
             SELECT * FROM Contacts 
             WHERE UserID = :userId 
-              AND (FirstName LIKE :t1 OR LastName LIKE :t2 OR PhoneNumber LIKE :t3 OR Email LIKE :t4)
+              AND (FirstName LIKE :t1 OR LastName LIKE :t2 OR PhoneNumber LIKE :t3 OR Email LIKE :t4 OR Category LIKE :t5)
             ORDER BY FirstName ASC
         ');
         $stmt->execute([
@@ -36,7 +36,8 @@ if ($method === 'GET') {
             ':t1' => $term,
             ':t2' => $term,
             ':t3' => $term,
-            ':t4' => $term
+            ':t4' => $term,
+            ':t5' => $term
         ]);
         $contacts = $stmt->fetchAll();
         respond(200, $contacts);
@@ -61,22 +62,25 @@ if ($method === 'POST') {
         $lastName  = clean($body['lastName'] ?? $body['lastname'] ?? '');
         $email     = clean($body['email'] ?? '');
         $phone     = clean($body['phone'] ?? $body['PhoneNumber'] ?? '');
+        $category  = contactCategory($body['category'] ?? '');
 
         $stmt = $db->prepare('
-            INSERT INTO Contacts (FirstName, LastName, Email, PhoneNumber, UserID)
-            VALUES (:firstName, :lastName, :email, :phone, :userId)
+            INSERT INTO Contacts (FirstName, LastName, Email, PhoneNumber, Category, UserID)
+            VALUES (:firstName, :lastName, :email, :phone, :category, :userId)
         ');
         $stmt->execute([
             ':firstName' => $firstName, 
             ':lastName'  => $lastName, 
             ':email'     => $email, 
-            ':phone'     => $phone, 
+            ':phone'     => $phone,
+            ':category'  => $category,
             ':userId'    => $userId
         ]);
 
         respond(200, [
             'message' => 'Contact Saved',
-            'id' => $db->lastInsertId()
+            'id' => $db->lastInsertId(),
+            'Category' => $category
         ]);
     }
 }
@@ -93,10 +97,11 @@ if ($method === 'PUT') {
     $lastName  = clean($body['lastName'] ?? $body['lastname'] ?? '');
     $email     = clean($body['email'] ?? '');
     $phone     = clean($body['phone'] ?? $body['PhoneNumber'] ?? '');
+    $category  = contactCategory($body['category'] ?? '');
 
     $stmt = $db->prepare('
         UPDATE Contacts 
-        SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phone 
+        SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phone, Category = :category
         WHERE ID = :contactId AND UserID = :userId
     ');
     $stmt->execute([
@@ -104,11 +109,20 @@ if ($method === 'PUT') {
         ':lastName'  => $lastName,
         ':email'     => $email,
         ':phone'     => $phone,
+        ':category'  => $category,
         ':contactId' => $contactId,
         ':userId'    => $userId
     ]);
 
-    respond(200, ['message' => 'Contact Updated']);
+    respond(200, ['message' => 'Contact Updated', 'Category' => $category]);
+}
+
+function contactCategory($value): string {
+    $category = clean(is_string($value) ? $value : '');
+    if (strlen($category) > 100) {
+        respond(400, ['error' => 'Category must be 100 characters or fewer']);
+    }
+    return $category;
 }
 
 if ($method === 'DELETE') {
