@@ -19,10 +19,6 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-<<<<<<< HEAD
-    gap: 12px;
-    width: 100%;
-=======
     gap: .75rem;
     height: 100%;
 }
@@ -41,7 +37,6 @@ body {
     border: 1px solid var(--border);
     border-radius: 12px;
     box-shadow: 0 4px 18px #4a2e1f12;
->>>>>>> 005c8863aebe291ea84d3115351aef9089998f89
 }
 
 #header-bar { display: flex; align-items: center; padding: 8px 16px; }
@@ -80,6 +75,7 @@ body {
     margin-left: 10%;
     margin-right: 10%;
     margin-top: 1rem;
+    background-color: var(--light-brown);
 }
 
 .contact-element {
@@ -330,7 +326,7 @@ button:hover {
 .field-caption {
     font-size: 0.82rem;
     font-weight: 600;
-    color: #4a3423;
+    color: var(--text);
 }
 
 /* Styles inputs to remain clean and responsive */
@@ -341,7 +337,7 @@ button:hover {
     font-size: 1rem;
     font-family: inherit;
     color: #2b1d0c;
-    background-color: #ffffff;
+    background-color: var(--light-brown);
     border: 1px solid #c4a482;
     border-radius: 6px;
     outline: none;
@@ -356,4 +352,10 @@ button:hover {
 .contact-input-field::placeholder {
     color: #a89f91;
     font-size: 0.95rem;
+}
+
+#dark-mode-toggle {
+    background-color: white;
+    color: #2b1d0c;
+    border-color: black;
 }
