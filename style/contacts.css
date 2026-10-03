@@ -131,11 +131,13 @@ body {
 }
 
 .edit-this-contact {
-    width: 50px;
+    width: auto;
+    display: flex;
     height: 100%;
     margin-left: auto;
     background-color: var(--blue);
-    padding: 0;
+    padding: 5px;
+    align-items: center;
 }
 
 .contact-change-icon {
@@ -151,6 +153,7 @@ body {
     background-color: var(--red);
     flex-direction: row;
     align-items: center;
+    padding: 5px;
 }
 
 .delete-confirm-text {
@@ -186,6 +189,7 @@ body {
     display: inherit;
     flex-direction: row;
     align-items: center;
+    color: #ead7c1;
 }
 
 .contact-bot {
@@ -247,7 +251,7 @@ body {
 }
 
 .edit-this-contact-button {
-    height: 50px;
+    height: auto;
     background-color: var(--dark-brown);
     width: auto;
 }
