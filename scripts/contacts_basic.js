@@ -18,5 +18,10 @@ function DisplayFirstAndLastName() {
     let nameHeader = document.getElementById('user-name');
     let usersName = (window.sessionStorage.getItem('firstName') ?? '[First Name Error]') + ' ' + 
                     (window.sessionStorage.getItem('lastName') ?? '[Last Name Error]');
-    nameHeader.innerHTML = usersName;
+    if (nameHeader) nameHeader.textContent = usersName;
+
+    const adminDashboardLink = document.getElementById('admin-dashboard-link');
+    if (adminDashboardLink && window.sessionStorage.getItem('role') === 'admin') {
+        adminDashboardLink.classList.remove('hidden');
+    }
 }
