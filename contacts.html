@@ -42,6 +42,7 @@
                                 <label class="contact-phone no-display">123-456-7890</label>
                                 <label class="contact-email">example@gmail.com</label>
                             </div>
+                            <div class="contact-category"></div>
                         </div>
                     </button>
                     <button class="edit-this-contact hidden" value="edit"
@@ -86,6 +87,17 @@
                             <label for="selected-contact-email" class="field-caption">Email Address</label>
                             <input type="email" id="selected-contact-email" class="contact-input-field"
                                 placeholder="name@example.com" autocomplete="off">
+                        </div>
+                        <div class="name-field-container">
+                            <label for="selected-contact-category" class="field-caption">Category</label>
+                            <select id="selected-contact-category" class="contact-input-field">
+                                <option value="">No category</option>
+                                <option value="Work">Work</option>
+                                <option value="Personal">Personal</option>
+                                <option value="__custom__">Custom</option>
+                            </select>
+                            <input type="text" id="selected-contact-custom-category" class="contact-input-field hidden"
+                                placeholder="Enter a category" maxlength="100" autocomplete="off">
                         </div>
                     </div>
                     <div id="selected-contact-header-bot"></div>
