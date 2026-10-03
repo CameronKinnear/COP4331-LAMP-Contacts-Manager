@@ -20,7 +20,8 @@ body:json {
     "firstName": "Bruno",
     "lastName": "Runner",
     "email": "bruno.runner@example.test",
-    "phone": "555-0100"
+    "phone": "555-0100",
+    "category": "Work"
   }
 }
 
@@ -33,6 +34,7 @@ assert {
   res.status: 200
   res.body.message: "Contact Saved"
   res.body.id: isNumber
+  res.body.Category: "Work"
 }
 
 script:post-response {

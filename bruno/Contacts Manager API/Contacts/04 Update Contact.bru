@@ -20,7 +20,8 @@ body:json {
     "firstName": "Bruno",
     "lastName": "Updated",
     "email": "bruno.updated@example.test",
-    "phone": "555-0101"
+    "phone": "555-0101",
+    "category": "Community Group"
   }
 }
 
@@ -32,4 +33,5 @@ vars:pre-request {
 assert {
   res.status: 200
   res.body.message: "Contact Updated"
+  res.body.Category: "Community Group"
 }

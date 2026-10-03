@@ -19,4 +19,5 @@ vars:pre-request {
 assert {
   res.status: 200
   res.body: isArray
+  res.body:jsonpath "$[0].Category": isString
 }
