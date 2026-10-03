@@ -12,9 +12,53 @@ if (document.readyState === "loading") {
 function InitContacts() {
     LoadContacts();
     SetupSearchBar();
+    SetupCategoryInput();
     if (typeof InitWidgetDragDrop === "function") {
         InitWidgetDragDrop();
     }
+}
+
+function SetupCategoryInput() {
+    const categorySelect = document.getElementById('selected-contact-category');
+    if (categorySelect) categorySelect.addEventListener('change', UpdateCustomCategoryVisibility);
+}
+
+function UpdateCustomCategoryVisibility() {
+    const categorySelect = document.getElementById('selected-contact-category');
+    const customInput = document.getElementById('selected-contact-custom-category');
+    if (!categorySelect || !customInput) return;
+    const isCustom = categorySelect.value === '__custom__';
+    customInput.classList.toggle('hidden', !isCustom);
+    customInput.disabled = !isCustom || categorySelect.disabled;
+    if (isCustom && !customInput.disabled) customInput.focus();
+}
+
+function SetCategoryField(category, editable) {
+    const categorySelect = document.getElementById('selected-contact-category');
+    const customInput = document.getElementById('selected-contact-custom-category');
+    if (!categorySelect || !customInput) return;
+
+    const standardCategories = ['Work', 'Personal'];
+    if (standardCategories.includes(category)) {
+        categorySelect.value = category;
+        customInput.value = '';
+    } else if (category) {
+        categorySelect.value = '__custom__';
+        customInput.value = category;
+    } else {
+        categorySelect.value = '';
+        customInput.value = '';
+    }
+    categorySelect.disabled = !editable;
+    customInput.disabled = !editable || categorySelect.value !== '__custom__';
+    customInput.classList.toggle('hidden', categorySelect.value !== '__custom__');
+}
+
+function GetCategoryValue() {
+    const categorySelect = document.getElementById('selected-contact-category');
+    const customInput = document.getElementById('selected-contact-custom-category');
+    if (!categorySelect) return '';
+    return categorySelect.value === '__custom__' ? (customInput ? customInput.value.trim() : '') : categorySelect.value;
 }
 
 // Setup search bar listener (debounced 300ms)
@@ -22,7 +66,7 @@ function SetupSearchBar() {
     const searchBar = document.getElementById("contact-search-bar");
     if (!searchBar) return;
 
-    searchBar.addEventListener("keydown", (e) => {
+    searchBar.addEventListener("input", (e) => {
         const query = e.target.value.trim();
         clearTimeout(searchDebounce);
         searchDebounce = setTimeout(() => {
@@ -59,7 +103,10 @@ function LoadContacts(query = "") {
                     contactDisplay.appendChild(newContact);
                 }
             } else if (query.length > 0) {
-                contactDisplay.innerHTML = `<div style="padding: 12px; color: #6e473b; font-size: 0.9rem;">No contacts found matching "${query}"</div>`;
+                const emptyMessage = document.createElement('div');
+                emptyMessage.style.cssText = 'padding: 12px; color: #6e473b; font-size: 0.9rem;';
+                emptyMessage.textContent = `No contacts found matching "${query}"`;
+                contactDisplay.appendChild(emptyMessage);
             }
         })
         .catch(error => {
@@ -70,13 +117,11 @@ function LoadContacts(query = "") {
 //  ADD NEW CONTACT BUTTON, CREATES THEN ADDS TO DISPLAY THEN POSTS TO DATABASE
 //
 function AddNewContact() {
-    jsonTemp = {
-        'FirstName': '[First]', 'LastName': '[Last]',
-        'Email': '[Email]', 'PhoneNumber': '[Phone]'
+    const jsonTemp = {
+        FirstName: '', LastName: '', Email: '', PhoneNumber: '', Category: ''
     }
     const newContact = CreateContactElement(jsonTemp);
     document.getElementById('contacts-display').appendChild(newContact);
-    PostContact(newContact);
 
     // Open right-hand pane in edit mode
     EditSelectedContact(newContact);
@@ -107,14 +152,15 @@ function CreateContactElement(contactInfo) {
                 <img src="images/placeholder_user.png" class="contact-icon" alt="Avatar">
             </div>
             <div class="contact-right">
-                <div class="contact-top">
-                    <label class="contact-first-name">${contactInfo.FirstName || ''}</label>
-                    <label class="contact-last-name">${contactInfo.LastName || ''}</label>
+            <div class="contact-top">
+                    <label class="contact-first-name"></label>
+                    <label class="contact-last-name"></label>
                 </div>
                 <div class="contact-bot">
-                    <label class="contact-phone no-display">${contactInfo.PhoneNumber || ''}</label>
-                    <label class="contact-email">${contactInfo.Email || ''}</label>
+                    <label class="contact-phone no-display"></label>
+                    <label class="contact-email"></label>
                 </div> 
+                <div class="contact-category"></div>
             </div>           
         </button>
         <button class="edit-this-contact hidden" value="edit" onclick="EditSelectedContact(this.parentElement)">
@@ -126,40 +172,17 @@ function CreateContactElement(contactInfo) {
         </button>
     `;
 
+    newElement.querySelector('.contact-first-name').textContent = contactInfo.FirstName || '';
+    newElement.querySelector('.contact-last-name').textContent = contactInfo.LastName || '';
+    newElement.querySelector('.contact-phone').textContent = contactInfo.PhoneNumber || '';
+    newElement.querySelector('.contact-email').textContent = contactInfo.Email || '';
+    const categoryElement = newElement.querySelector('.contact-category');
+    categoryElement.dataset.category = contactInfo.Category || '';
+    categoryElement.textContent = contactInfo.Category ? `Category: ${contactInfo.Category}` : '';
+
     // Add mouse over functionality
     AddMouseOverFunctionality(newElement);
     return newElement;
-}
-
-//  POSTS A CONTACT TO THE DATABASE
-// 
-function PostContact(contact) {
-    let payload = {
-        save: true,
-        firstName: contact.querySelector('.contact-first-name').innerHTML,
-        lastName: contact.querySelector('.contact-last-name').innerHTML,
-        email: contact.querySelector('.contact-email').innerHTML,
-        phone: contact.querySelector('.contact-phone').innerHTML
-    };
-
-    fetch("api/contacts.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    })
-        .then(response => response.json().then(data => ({ status: response.status, body: data })))
-        .then(({ status, body }) => {
-            if (status >= 400 || body.error) {
-
-            } else {
-                console.log(data.message);
-            }
-        })
-        .catch(err => {
-
-        });
 }
 
 // COPIES DATA FROM THE CONTACTS COLUMN TO DISPLAY IN THE LARGE AREA
@@ -171,6 +194,7 @@ function DisplaySelectedContact(contact) {
     const contactlName = document.getElementById('selected-contact-last-name');
     const contactPhoneInput = document.getElementById('selected-contact-phone');
     const contactEmailInput = document.getElementById('selected-contact-email');
+    const category = contact.querySelector('.contact-category');
 
     // Reveal the contact detail pane
     if (contactHeader) contactHeader.classList.remove('hidden');
@@ -212,6 +236,8 @@ function DisplaySelectedContact(contact) {
         contactEmailInput.classList.add('disabled-input');
     }
 
+    SetCategoryField(category ? category.dataset.category || '' : '', false);
+
     selectedContact = contact;
 }
 
@@ -226,12 +252,15 @@ function EditSelectedContact(contact) {
     const contactlName = document.getElementById('selected-contact-last-name');
     const contactPhone = document.getElementById('selected-contact-phone');
     const contactEmail = document.getElementById('selected-contact-email');
-
     // Reveal contact pane
     if (contactHeader) contactHeader.classList.remove('hidden');
 
     // Save action triggered
     if (editContactButton.value === 'save') {
+        if (document.getElementById('selected-contact-category')?.value === '__custom__' && !GetCategoryValue()) {
+            document.getElementById('selected-contact-custom-category').focus();
+            return;
+        }
         editImg.src = 'images/edit_icon.png';
         editContactButton.value = 'edit';
         editContactButton.style.backgroundColor = 'var(--blue)';
@@ -253,6 +282,7 @@ function EditSelectedContact(contact) {
             contactEmail.readOnly = true;
             contactEmail.classList.add('disabled-input');
         }
+        SetCategoryField(GetCategoryValue(), false);
 
         SaveEditedContact(contact);
         return;
@@ -264,6 +294,7 @@ function EditSelectedContact(contact) {
     const lastName = contact.querySelector('.contact-last-name');
     const phone = contact.querySelector('.contact-phone');
     const email = contact.querySelector('.contact-email');
+    const category = contact.querySelector('.contact-category');
 
     editContactButton.style.backgroundColor = 'var(--green)';
     if (image && contactImage) contactImage.src = image.src;
@@ -293,6 +324,7 @@ function EditSelectedContact(contact) {
         contactEmail.readOnly = false;
         contactEmail.classList.remove('disabled-input');
     }
+    SetCategoryField(category ? category.dataset.category || '' : '', true);
 
     editContactButton.value = 'save';
     selectedContact = contact;
@@ -305,23 +337,33 @@ function SaveEditedContact(contact) {
     const contactlName = document.getElementById('selected-contact-last-name');
     const contactPhone = document.getElementById('selected-contact-phone');
     const contactEmail = document.getElementById('selected-contact-email');
+    const category = GetCategoryValue();
 
     // Read the latest edited values directly from the input fields
     const firstname = contactfName ? contactfName.value.trim() : '';
     const lastname = contactlName ? contactlName.value.trim() : '';
     const phonenumber = contactPhone ? contactPhone.value.trim() : '';
     const email = contactEmail ? contactEmail.value.trim() : '';
+    if (document.getElementById('selected-contact-category')?.value === '__custom__' && !category) {
+        document.getElementById('selected-contact-custom-category').focus();
+        return;
+    }
 
     // Sync back to the left sidebar card preview
     const sidebarFirst = contact.querySelector('.contact-first-name');
     const sidebarLast = contact.querySelector('.contact-last-name');
     const sidebarPhone = contact.querySelector('.contact-phone');
     const sidebarEmail = contact.querySelector('.contact-email');
+    const sidebarCategory = contact.querySelector('.contact-category');
 
     if (sidebarFirst) sidebarFirst.innerText = firstname;
     if (sidebarLast) sidebarLast.innerText = lastname;
     if (sidebarPhone) sidebarPhone.innerText = phonenumber;
     if (sidebarEmail) sidebarEmail.innerText = email;
+    if (sidebarCategory) {
+        sidebarCategory.dataset.category = category;
+        sidebarCategory.textContent = category ? `Category: ${category}` : '';
+    }
 
     const contactId = contact.dataset.id;
 
@@ -330,7 +372,8 @@ function SaveEditedContact(contact) {
         firstName: firstname,
         lastName: lastname,
         email: email,
-        phone: phonenumber
+        phone: phonenumber,
+        category: category
     };
 
     // If contact already has an ID, update with PUT; otherwise new entries use POST
