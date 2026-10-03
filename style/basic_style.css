@@ -3,6 +3,8 @@
     --brown: #8b5a3c;
     --light-brown: #e8d8c4;
     --cream: #f7f1e8;
+    --border: #d7c3ac;
+    --surface: #fffdfa;
     --red: #B10909;
     --blue: #130580;
     --green: #058015;
@@ -11,12 +13,18 @@
 body {
     background-color: var(--cream);
     color: var(--dark-brown);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.4;
 }
 
 button {
     background-color: var(--brown);
     color: var(--cream);
     border: 1px solid var(--dark-brown);
+    border-radius: 6px;
+    padding: .5rem 1rem;
+    font: inherit;
+    font-weight: 600;
 }
 
 button {
@@ -42,7 +50,26 @@ button:active {
 input {
     background-color: white;
     border: 1px solid var(--brown);
+    border-radius: 6px;
+    padding: .55rem .7rem;
     color: var(--dark-brown);
+    font: inherit;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--dark-brown);
+    box-shadow: 0 0 0 3px rgba(139, 90, 60, 0.2);
+}
+
+a {
+    color: var(--brown);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 .flex-center {
@@ -72,6 +99,18 @@ input {
     height: 50px;
 }
 
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+    margin-top: 3rem;
+}
+
+.header-content h1 {
+    margin: 0;
+}
+
 .big-name-text {
     font-size: 60px;
 }
@@ -94,4 +133,6 @@ input {
 
 .button-nodesign {
     border: none;
+    border-radius: 0;
+    padding: 0;
 }
