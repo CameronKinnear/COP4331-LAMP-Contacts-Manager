@@ -44,7 +44,7 @@
 .contact-element {
     display: flex;
     flex-direction: row;
-    height: 50px;
+    min-height: 68px;
     margin-top: 10px;
     margin-left: 5%;
     border: 2px solid var(--dark-brown);
@@ -123,6 +123,7 @@
     padding-left: 5px;
     display: inherit;
     flex-direction: column;
+    justify-content: center;
 }
 
 .contact-top {
@@ -137,6 +138,12 @@
     flex-direction: row;
     height: 50%;
     align-items: center;
+}
+
+.contact-category {
+    color: #f8eee2;
+    font-size: 0.72rem;
+    line-height: 1.1;
 }
 
 .contact-first-name {
