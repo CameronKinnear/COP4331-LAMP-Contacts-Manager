@@ -62,3 +62,12 @@ function ToggleDarkMode() {
         currentWindowTheme = 'dark';
     }
 }
+
+document.getElementById('logout-button').addEventListener('click', async () => {
+        try {
+            await fetch('api/index.php?logout=1', { method: 'POST' });
+        } finally {
+            sessionStorage.clear();
+            window.location.assign('index.html');
+        }
+    });

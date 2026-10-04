@@ -535,6 +535,7 @@ button:hover {
 
 #dark-mode-toggle {
     background-color: #ead7c1;
+    color: #2b1d0c;
     padding: 5px;
     border-radius: 5px;
 }
