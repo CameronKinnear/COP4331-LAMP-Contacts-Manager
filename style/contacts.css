@@ -25,6 +25,7 @@ body {
 
 #logo h1 {
     margin: 0;
+    color: #ead7c1;
 }
 
 #contacts-column,
@@ -47,6 +48,7 @@ body {
 
 #header-name {
     margin-right: auto;
+    color: #ead7c1;
 }
 
 .header-link {
@@ -521,4 +523,18 @@ button:hover {
     fill: #ffe082;
     stroke: #ffb300;
     transform: scale(1.1);
+}
+
+#header-bar-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto;
+    gap: 20px
+}
+
+#dark-mode-toggle {
+    background-color: #ead7c1;
+    padding: 5px;
+    border-radius: 5px;
 }
