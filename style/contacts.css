@@ -13,6 +13,7 @@ body {
 #main-logo {
     width: 50px;
     height: 50px;
+    filter: brightness(0) invert(1);
 }
 
 #logo {
@@ -538,4 +539,15 @@ button:hover {
     color: #2b1d0c;
     padding: 5px;
     border-radius: 5px;
+}
+
+/* If dark mode is triggered purely by the header checkbox being checked */
+body:has(#dark-mode-toggle-button:checked) .favorite-toggle-label {
+    color: #ead7c1 !important;
+}
+
+/* If a script adds a dark-mode class to <body> */
+body.dark-mode .favorite-toggle-label,
+body.dark .favorite-toggle-label {
+    color: #ead7c1 !important;
 }
