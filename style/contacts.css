@@ -19,11 +19,9 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-<<<<<<< HEAD
-    gap: 12px;
+    <<<<<<< HEAD gap: 12px;
     width: 100%;
-=======
-    gap: .75rem;
+    =======gap: .75rem;
     height: 100%;
 }
 
@@ -41,13 +39,33 @@ body {
     border: 1px solid var(--border);
     border-radius: 12px;
     box-shadow: 0 4px 18px #4a2e1f12;
->>>>>>> 005c8863aebe291ea84d3115351aef9089998f89
+    >>>>>>>005c8863aebe291ea84d3115351aef9089998f89
 }
 
-#header-bar { display: flex; align-items: center; padding: 8px 16px; }
-#header-name { margin-right: auto; }
-.header-link { display: inline-block; padding: 8px 12px; border: 1px solid var(--dark-brown); border-radius: 6px; background: var(--brown); color: var(--cream); text-decoration: none; font-weight: 600; }
-.header-link:hover { background: var(--dark-brown); }
+#header-bar {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+}
+
+#header-name {
+    margin-right: auto;
+}
+
+.header-link {
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid var(--dark-brown);
+    border-radius: 6px;
+    background: var(--brown);
+    color: var(--cream);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.header-link:hover {
+    background: var(--dark-brown);
+}
 
 #contacts-column {
     width: 35%;
@@ -356,4 +374,149 @@ button:hover {
 .contact-input-field::placeholder {
     color: #a89f91;
     font-size: 0.95rem;
+}
+
+/* Card relative container */
+.contact-element {
+    position: relative;
+}
+
+/* Detail view relative avatar wrapper */
+#selected-contact-header-left,
+.detail-avatar-container {
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+}
+
+/* Base Book Dart Button */
+.btn-book-dart {
+    position: absolute;
+    top: 2px;
+    left: -1px;
+    z-index: 10;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: 34px;
+    height: 18px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    /* Hidden by default on unfavorited contacts */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.btn-book-dart.is-favorited {
+    display: flex;
+}
+
+/* Reveal dart on hover so users can click to bookmark unfavorited contacts */
+.contact-element:hover .btn-book-dart,
+#selected-contact-header-left:hover .btn-book-dart,
+.detail-avatar-container:hover .btn-book-dart {
+    opacity: 0.45;
+    pointer-events: auto;
+}
+
+/* When favorited: fully visible and interactive at all times */
+.btn-book-dart.is-favorited {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Position adjustment for the right-hand preview avatar */
+.btn-book-dart.detail-dart {
+    position: absolute;
+    top: 4px;
+    left: -6px;
+    width: 36px;
+    height: 18px;
+    z-index: 5;
+}
+
+/* Base metallic brass SVG styling */
+.book-dart-icon {
+    width: 100%;
+    height: 100%;
+    fill: #ffd54f;
+    stroke: #c49000;
+    stroke-width: 1;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+    transition: transform 0.15s ease;
+}
+
+/* Bright high-sheen gold when favorited */
+.btn-book-dart.is-favorited .book-dart-icon {
+    fill: #ffe082;
+    stroke: #ffb300;
+    filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.35)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+}
+
+.btn-book-dart:hover .book-dart-icon {
+    transform: scale(1.08);
+}
+
+/* Keyboard accessibility outline */
+.btn-book-dart:focus-visible {
+    outline: 2px solid #e2c068;
+    outline-offset: 3px;
+    border-radius: 2px;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Favorite Checkbox Row */
+.favorite-checkbox-container {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.favorite-toggle-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4a3525;
+    user-select: none;
+}
+
+.favorite-toggle-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #d4a337;
+    cursor: pointer;
+}
+
+.favorite-toggle-label input[type="checkbox"]:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+/* Inline preview dart next to checkbox - Hidden by default */
+.book-dart-inline-icon {
+    width: 28px;
+    height: 14px;
+    fill: #ffd54f;
+    stroke: #c49000;
+    stroke-width: 1.2;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+    display: none;
+    /* Hidden until box is checked */
+    transition: transform 0.2s ease;
+}
+
+/* Show only when the checkbox is checked */
+.favorite-toggle-label input[type="checkbox"]:checked~.book-dart-inline-icon {
+    display: inline-block;
+    fill: #ffe082;
+    stroke: #ffb300;
+    transform: scale(1.1);
 }

@@ -65,6 +65,8 @@
         <!-- 2. RIGHT COLUMN (Now safely inside #main-content) -->
         <div id="selected-contact-column">
             <div id="selected-contact-header" class="hidden">
+
+                <!-- Left Side: Avatar -->
                 <div id="selected-contact-header-left">
                     <img id="selected-contact-img" src="images/placeholder_user.png" alt="Contact Avatar">
                 </div>
@@ -101,18 +103,28 @@
                             <input type="text" id="selected-contact-custom-category" class="contact-input-field hidden"
                                 placeholder="Enter a category" maxlength="100" autocomplete="off">
                         </div>
+                        <div class="name-field-container favorite-checkbox-container">
+                            <label class="favorite-toggle-label" for="selected-contact-favorite">
+                                <input type="checkbox" id="selected-contact-favorite" name="isFavorite">
+                                <span class="favorite-toggle-text">Favorite (Pinned Contact)</span>
+                                <svg class="book-dart-inline-icon" viewBox="0 0 45 22" aria-hidden="true"
+                                    focusable="false">
+                                    <path d="M 2 2 L 26 2 L 42 11 L 26 20 L 2 20 Z" />
+                                </svg>
+                            </label>
+                        </div>
                     </div>
                     <div id="selected-contact-header-bot"></div>
                 </div>
             </div>
+        </div>
+        <!-- Widgets container -->
+        <div id="selected-contact-widgets" class="no-display"></div>
 
-            <!-- Widgets container -->
-            <div id="selected-contact-widgets" class="no-display"></div>
-
-            <div id="drag-widget-here-to-add" class="hidden">
-                <div class="plus-sign"></div>
-            </div>
-        </div><!-- END #selected-contact-column -->
+        <div id="drag-widget-here-to-add" class="hidden">
+            <div class="plus-sign"></div>
+        </div>
+    </div><!-- END #selected-contact-column -->
     </div><!-- END #main-content -->
 
     <footer id="widgets" class="no-display">
