@@ -19,9 +19,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    <<<<<<< HEAD gap: 12px;
-    width: 100%;
-    =======gap: .75rem;
+    gap: .75rem;
     height: 100%;
 }
 
@@ -39,7 +37,6 @@ body {
     border: 1px solid var(--border);
     border-radius: 12px;
     box-shadow: 0 4px 18px #4a2e1f12;
-    >>>>>>>005c8863aebe291ea84d3115351aef9089998f89
 }
 
 #header-bar {
@@ -98,6 +95,7 @@ body {
     margin-left: 10%;
     margin-right: 10%;
     margin-top: 1rem;
+    background-color: var(--light-brown);
 }
 
 .contact-element {
@@ -153,11 +151,13 @@ body {
 }
 
 .edit-this-contact {
-    width: 50px;
+    width: auto;
+    display: flex;
     height: 100%;
     margin-left: auto;
     background-color: var(--blue);
-    padding: 0;
+    padding: 5px;
+    align-items: center;
 }
 
 .contact-change-icon {
@@ -173,6 +173,7 @@ body {
     background-color: var(--red);
     flex-direction: row;
     align-items: center;
+    padding: 5px;
 }
 
 .delete-confirm-text {
@@ -208,6 +209,7 @@ body {
     display: inherit;
     flex-direction: row;
     align-items: center;
+    color: #ead7c1;
 }
 
 .contact-bot {
@@ -269,7 +271,7 @@ body {
 }
 
 .edit-this-contact-button {
-    height: 50px;
+    height: auto;
     background-color: var(--dark-brown);
     width: auto;
 }
@@ -348,7 +350,7 @@ button:hover {
 .field-caption {
     font-size: 0.82rem;
     font-weight: 600;
-    color: #4a3423;
+    color: var(--text);
 }
 
 /* Styles inputs to remain clean and responsive */
@@ -359,7 +361,7 @@ button:hover {
     font-size: 1rem;
     font-family: inherit;
     color: #2b1d0c;
-    background-color: #ffffff;
+    background-color: var(--light-brown);
     border: 1px solid #c4a482;
     border-radius: 6px;
     outline: none;

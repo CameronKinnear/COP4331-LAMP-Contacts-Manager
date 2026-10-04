@@ -5,12 +5,26 @@
 // Runs when contacts.html page loads
 //
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", InitContacts);
+    document.addEventListener("DOMContentLoaded", DOMInit);
 } else {
     // Put all functions that should run on page load here \/
-    DisplayFirstAndLastName();
+    DOMInit();
+    
 }
 
+function DOMInit() {
+    DisplayFirstAndLastName();
+    let toggleDarkModeButton = document.getElementById('dark-mode-toggle-button');
+    console.log(toggleDarkModeButton);
+    if (!toggleDarkModeButton) {
+        console.error('dark-mode-toggle-button not found');
+        return;
+    }
+    toggleDarkModeButton.addEventListener('change', () => {
+        console.log("toggle dark mode");
+        ToggleDarkMode();
+    });
+}
 
 // Displays the users first and last name in the header
 //
@@ -23,5 +37,28 @@ function DisplayFirstAndLastName() {
     const adminDashboardLink = document.getElementById('admin-dashboard-link');
     if (adminDashboardLink && window.sessionStorage.getItem('role') === 'admin') {
         adminDashboardLink.classList.remove('hidden');
+    }
+}
+
+let currentWindowTheme = 'light';
+const root = document.documentElement;
+
+// 2. Change the value of the variable
+
+function ToggleDarkMode() {
+    if (currentWindowTheme == 'dark') {
+        // Change to light mode
+        root.style.setProperty('--bg_color', '#e8d8c4');
+        root.style.setProperty('--surface', '#fffdfa');
+
+        root.style.setProperty('--text', '#000000');
+        currentWindowTheme = 'light';
+    }
+    else if (currentWindowTheme == 'light') {
+        // Change to dark mode
+        root.style.setProperty('--bg_color', '#1d120c');
+        root.style.setProperty('--surface', '#4a2e1f');
+        root.style.setProperty('--text', '#ffffff');
+        currentWindowTheme = 'dark';
     }
 }
