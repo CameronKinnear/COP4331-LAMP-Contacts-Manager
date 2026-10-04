@@ -134,7 +134,7 @@ function LoadContacts(query = "") {
 //
 function AddNewContact() {
     const jsonTemp = {
-        FirstName: '', LastName: '', Email: '', PhoneNumber: '', Category: ''
+        FirstName: '', LastName: '', Email: '', PhoneNumber: '', Category: '', IsFavorite: 0
     }
     const newContact = CreateContactElement(jsonTemp);
     document.getElementById('contacts-display').appendChild(newContact);
@@ -147,8 +147,13 @@ function AddNewContact() {
     if (contactfName) {
         contactfName.focus();
     }
-}
 
+    const favCheckbox = document.getElementById('selected-contact-favorite');
+    if (favCheckbox) {
+        favCheckbox.checked = false;
+        favCheckbox.disabled = false;
+    }
+}
 
 //  CREATES A NEW CONTACT ELEMENT WITH JSON INPUT
 //  contactInfo = {'ID', 'FirstName', 'LastName', 'Email', 'PhoneNumber'}
@@ -162,7 +167,23 @@ function CreateContactElement(contactInfo) {
         newElement.dataset.id = contactInfo.ID;
     }
 
+    //adding fav contact 
+    const isFav = Number(contactInfo?.IsFavorite || 0) === 1;
+    newElement.dataset.isFavorite = isFav ? "1" : "0";
+
+    const fullName = `${contactInfo.FirstName || ''} ${contactInfo.LastName || ''}`.trim() || 'Contact';
+
     newElement.innerHTML = `
+        <!-- Accessible Book Dart Favorite Toggle -->
+        <button type="button" 
+                class="btn-book-dart ${isFav ? 'is-favorited' : ''}" 
+                aria-pressed="${isFav}" 
+                aria-label="${isFav ? `Remove ${fullName} from favorites` : `Bookmark ${fullName} as favorite`}">
+            <svg class="book-dart-icon" viewBox="0 0 45 22" aria-hidden="true" focusable="false">
+                <path d="M 2 2 L 26 2 L 42 11 L 26 20 L 2 20 Z" />
+            </svg>
+        </button>
+        
         <button class="select-this-contact button-nodesign" onclick="DisplaySelectedContact(this.parentElement)">
             <div class="contact-left">
                 <img src="images/placeholder_user.png" class="contact-icon" alt="Avatar">
@@ -196,9 +217,66 @@ function CreateContactElement(contactInfo) {
     categoryElement.dataset.category = contactInfo.Category || '';
     categoryElement.textContent = contactInfo.Category ? `Category: ${contactInfo.Category}` : '';
 
+    // Handle book dart toggle click
+    const dartBtn = newElement.querySelector('.btn-book-dart');
+    dartBtn.addEventListener('click', async (e) => {
+        e.stopPropagation(); // Prevent opening contact preview when clicking the dart
+        const contactId = newElement.dataset.id;
+        if (!contactId) return;
+
+        const currentFav = newElement.dataset.isFavorite === "1";
+        const nextFav = !currentFav;
+
+        try {
+            const res = await fetch("api/contacts.php", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: contactId,
+                    is_favorite: nextFav ? 1 : 0
+                })
+            });
+
+            if (res.ok) {
+                newElement.dataset.isFavorite = nextFav ? "1" : "0";
+                dartBtn.setAttribute('aria-pressed', String(nextFav));
+                dartBtn.classList.toggle('is-favorited', nextFav);
+                dartBtn.setAttribute(
+                    'aria-label',
+                    nextFav ? `Remove ${fullName} from favorites` : `Bookmark ${fullName} as favorite`
+                );
+
+                // Sync the detail view dart if this contact is currently open
+                if (selectedContact === newElement) {
+                    UpdateDetailPaneDart(nextFav, fullName);
+                }
+
+                // If you have a search/refresh function, re-run it to push favorites to top
+                if (typeof SearchContacts === 'function') {
+                    SearchContacts();
+                }
+            }
+        } catch (err) {
+            console.error("Failed to update favorite status:", err);
+        }
+    });
     // Add mouse over functionality
-    AddMouseOverFunctionality(newElement);
+    if (typeof AddMouseOverFunctionality === 'function') {
+        AddMouseOverFunctionality(newElement);
+    }
     return newElement;
+}
+
+function UpdateDetailPaneDart(isFav, fullName) {
+    const detailDartBtn = document.getElementById('detail-book-dart');
+    if (!detailDartBtn) return;
+
+    detailDartBtn.classList.toggle('is-favorited', isFav);
+    detailDartBtn.setAttribute('aria-pressed', String(isFav));
+    detailDartBtn.setAttribute(
+        'aria-label',
+        isFav ? `Remove ${fullName} from favorites` : `Bookmark ${fullName} as favorite`
+    );
 }
 
 // COPIES DATA FROM THE CONTACTS COLUMN TO DISPLAY IN THE LARGE AREA
@@ -257,6 +335,14 @@ function DisplaySelectedContact(contact) {
     SetCategoryField(category ? category.dataset.category || '' : '', true);
 
     selectedContact = contact;
+
+    // Sync the Favorite Checkbox
+    const favCheckbox = document.getElementById('selected-contact-favorite');
+    const isFav = contact.dataset.isFavorite === "1";
+    if (favCheckbox) {
+        favCheckbox.checked = isFav;
+        favCheckbox.disabled = true; // Kept disabled in view mode
+    }
 }
 
 //  MAKES SELECTED CONTACT EDITABLE AND SETS UP SAVE ACTION
@@ -274,7 +360,7 @@ function EditSelectedContact(contact) {
     if (contactHeader) contactHeader.classList.remove('hidden');
 
     // Save action triggered
-    if (editContactButton.value === 'save') {
+    if (editContactButton && editContactButton.value === 'save') {
         if (document.getElementById('selected-contact-category')?.value === '__custom__' && !GetCategoryValue()) {
             document.getElementById('selected-contact-custom-category').focus();
             return;
@@ -301,6 +387,12 @@ function EditSelectedContact(contact) {
             contactEmail.classList.add('disabled-input');
         }
         SetCategoryField(GetCategoryValue(), false);
+
+        // Lock favorite checkbox after saving
+        const favCheckbox = document.getElementById('selected-contact-favorite');
+        if (favCheckbox) {
+            favCheckbox.disabled = true;
+        }
 
         SaveEditedContact(contact);
         return;
@@ -344,6 +436,12 @@ function EditSelectedContact(contact) {
     }
     SetCategoryField(category ? category.dataset.category || '' : '', true);
 
+    // Unlock favorite checkbox for editing
+    const favCheckbox = document.getElementById('selected-contact-favorite');
+    if (favCheckbox) {
+        favCheckbox.disabled = false;
+    }
+
     editContactButton.value = 'save';
     selectedContact = contact;
 }
@@ -385,13 +483,31 @@ function SaveEditedContact(contact) {
 
     const contactId = contact.dataset.id;
 
+    // Read the checkbox state directly from the right panel
+    const favCheckbox = document.getElementById('selected-contact-favorite');
+    const isFavVal = favCheckbox && favCheckbox.checked ? 1 : 0;
+
+    // Update the card's dataset and visually show/hide the dart on the left
+    contact.dataset.isFavorite = String(isFavVal);
+    const cardDart = contact.querySelector('.btn-book-dart');
+    if (cardDart) {
+        cardDart.classList.toggle('is-favorited', isFavVal === 1);
+        cardDart.setAttribute('aria-pressed', String(isFavVal === 1));
+        const fullName = `${firstname} ${lastname}`.trim() || 'Contact';
+        cardDart.setAttribute(
+            'aria-label',
+            isFavVal === 1 ? `Remove ${fullName} from favorites` : `Bookmark ${fullName} as favorite`
+        );
+    }
+
     let payload = {
         id: contactId,
         firstName: firstname,
         lastName: lastname,
         email: email,
         phone: phonenumber,
-        category: category
+        category: category,
+        is_favorite: isFavVal
     };
 
     // If contact already has an ID, update with PUT; otherwise new entries use POST
@@ -462,17 +578,17 @@ function DeleteSelectedContact(contact) {
             "Content-Type": "application/json"
         },
     })
-    .then(response => response.json().then(data => ({ status: response.status, body: data })))
-    .then(({ status, body }) => {
-        if (status >= 400 || body.error) {
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(({ status, body }) => {
+            if (status >= 400 || body.error) {
 
-        } else {
-            console.log(data.message);
-        }
-    })
-    .catch(err => {
+            } else {
+                console.log(data.message);
+            }
+        })
+        .catch(err => {
 
-    });
+        });
 
     contact.remove();
 }
@@ -543,3 +659,11 @@ function AddWidgetToContact(widget) {
         console.log("Note Widget Added");
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('detail-book-dart')?.addEventListener('click', () => {
+        if (selectedContact) {
+            selectedContact.querySelector('.btn-book-dart')?.click();
+        }
+    });
+});

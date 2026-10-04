@@ -29,7 +29,7 @@ if ($method === 'GET') {
             SELECT * FROM Contacts 
             WHERE UserID = :userId 
               AND (FirstName LIKE :t1 OR LastName LIKE :t2 OR PhoneNumber LIKE :t3 OR Email LIKE :t4 OR Category LIKE :t5)
-            ORDER BY FirstName ASC
+            ORDER BY IsFavorite DESC, FirstName ASC
         ');
         $stmt->execute([
             ':userId' => $userId,
@@ -45,7 +45,7 @@ if ($method === 'GET') {
 
     // Default contact fetch
     if (isset($_GET['contacts'])) {
-        $stmt = $db->prepare('SELECT * FROM Contacts WHERE UserID = :id ORDER BY FirstName ASC');
+        $stmt = $db->prepare('SELECT * FROM Contacts WHERE UserID = :id ORDER BY IsFavorite DESC, FirstName ASC');
         $stmt->execute([':id' => $userId]);
         $contacts = $stmt->fetchAll();
 
@@ -63,10 +63,11 @@ if ($method === 'POST') {
         $email     = clean($body['email'] ?? '');
         $phone     = clean($body['phone'] ?? $body['PhoneNumber'] ?? '');
         $category  = contactCategory($body['category'] ?? '');
-
+        $isFavorite = !empty($body['isFavorite']) || !empty($body['is_favorite']) || !empty($body['IsFavorite']) ? 1 : 0;
+        
         $stmt = $db->prepare('
-            INSERT INTO Contacts (FirstName, LastName, Email, PhoneNumber, Category, UserID)
-            VALUES (:firstName, :lastName, :email, :phone, :category, :userId)
+            INSERT INTO Contacts (FirstName, LastName, Email, PhoneNumber, Category, UserID, IsFavorite)
+            VALUES (:firstName, :lastName, :email, :phone, :category, :userId, :isFavorite)
         ');
         $stmt->execute([
             ':firstName' => $firstName, 
@@ -74,7 +75,8 @@ if ($method === 'POST') {
             ':email'     => $email, 
             ':phone'     => $phone,
             ':category'  => $category,
-            ':userId'    => $userId
+            ':userId'    => $userId,
+            ':isFavorite' => $isFavorite
         ]);
 
         respond(200, [
@@ -98,10 +100,11 @@ if ($method === 'PUT') {
     $email     = clean($body['email'] ?? '');
     $phone     = clean($body['phone'] ?? $body['PhoneNumber'] ?? '');
     $category  = contactCategory($body['category'] ?? '');
+    $isFavorite = !empty($body['isFavorite']) || !empty($body['is_favorite']) || !empty($body['IsFavorite']) ? 1 : 0;
 
     $stmt = $db->prepare('
-        UPDATE Contacts 
-        SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phone, Category = :category
+        UPDATE Contacts
+        SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phone, Category = :category, IsFavorite = :isFavorite
         WHERE ID = :contactId AND UserID = :userId
     ');
     $stmt->execute([
@@ -110,6 +113,7 @@ if ($method === 'PUT') {
         ':email'     => $email,
         ':phone'     => $phone,
         ':category'  => $category,
+        ':isFavorite' => $isFavorite,
         ':contactId' => $contactId,
         ':userId'    => $userId
     ]);
