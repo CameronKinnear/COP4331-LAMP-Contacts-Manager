@@ -546,7 +546,7 @@ function SaveEditedContact(contact) {
     if (method === "POST") {
         payload.save = true;
     }
-    console.log(method);
+    console.log(payload.save);
 
     fetch("api/contacts.php", {
         method: method,
@@ -635,18 +635,18 @@ contacts.forEach(contact => {
 //  ADDS MOUSE OVER FUNCTIONAILITY TO SPECIFIED CONTACT
 // 
 function AddMouseOverFunctionality(contact) {
+    let editButton = contact.querySelector('.edit-this-contact');
+    let deleteButton = contact.querySelector('.delete-this-button');
     contact.addEventListener('mouseenter', (e) => {
-        let contactButtons = e.currentTarget.querySelectorAll('button');
-        if (contactButtons[1]) contactButtons[1].classList.remove('hidden');
-        if (contactButtons[2]) contactButtons[2].classList.remove('hidden');
+        if (editButton) editButton.classList.remove('hidden');
+        if (deleteButton) deleteButton.classList.remove('hidden');
     });
     contact.addEventListener('mouseleave', (e) => {
-        let contactButtons = e.currentTarget.querySelectorAll('button');
-        if (contactButtons[1] && contactButtons[1].value !== 'save') {
-            contactButtons[1].classList.add('hidden');
+        if (editButton && editButton.value !== 'save') {
+            editButton.classList.add('hidden');
         }
-        if (contactButtons[2] && contactButtons[2].value !== 'confirm') {
-            contactButtons[2].classList.add('hidden');
+        if (deleteButton && deleteButton.value !== 'confirm') {
+            deleteButton.classList.add('hidden');
         }
     });
 }
