@@ -267,6 +267,37 @@ function CreateContactElement(contactInfo) {
     return newElement;
 }
 
+//  POSTS A CONTACT TO THE DATABASE
+// 
+function PostContact(contact) {
+    let payload = {
+        save: true,
+        firstName: contact.querySelector('.contact-first-name').innerHTML,
+        lastName: contact.querySelector('.contact-last-name').innerHTML,
+        email: contact.querySelector('.contact-email').innerHTML,
+        phone: contact.querySelector('.contact-phone').innerHTML
+    };
+
+    fetch("api/contacts.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(({ status, body }) => {
+            if (status >= 400 || body.error) {
+
+            } else {
+                console.log(data.message);
+            }
+        })
+        .catch(err => {
+
+        });
+}
+
 function UpdateDetailPaneDart(isFav, fullName) {
     const detailDartBtn = document.getElementById('detail-book-dart');
     if (!detailDartBtn) return;
@@ -515,6 +546,7 @@ function SaveEditedContact(contact) {
     if (method === "POST") {
         payload.save = true;
     }
+    console.log(method);
 
     fetch("api/contacts.php", {
         method: method,
