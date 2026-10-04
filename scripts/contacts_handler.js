@@ -636,12 +636,12 @@ contacts.forEach(contact => {
 // 
 function AddMouseOverFunctionality(contact) {
     let editButton = contact.querySelector('.edit-this-contact');
-    let deleteButton = contact.querySelector('.delete-this-button');
-    contact.addEventListener('mouseenter', (e) => {
+    let deleteButton = contact.querySelector('.delete-this-contact');
+    contact.addEventListener('mouseenter', () => {
         if (editButton) editButton.classList.remove('hidden');
         if (deleteButton) deleteButton.classList.remove('hidden');
     });
-    contact.addEventListener('mouseleave', (e) => {
+    contact.addEventListener('mouseleave', () => {
         if (editButton && editButton.value !== 'save') {
             editButton.classList.add('hidden');
         }
