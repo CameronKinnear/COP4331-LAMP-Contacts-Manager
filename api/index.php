@@ -78,7 +78,7 @@ function login(PDO $db, array $body): void {
     $user = $stmt->fetch();
 
     if (!$user || !password_verify($password, $user['Password'])) {
-        respond(401, ['id' => 0, 'firstName' => '', 'lastName' => '', 'error' => 'No Records Found']);
+        respond(401, ['id' => 0, 'firstName' => '', 'lastName' => '', 'error' => 'Invalid Login']);
     }
 
     // Checked only after the password is proven, so strangers can't probe which accounts are disabled.
