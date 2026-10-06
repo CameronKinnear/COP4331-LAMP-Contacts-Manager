@@ -13,11 +13,11 @@ get {
 vars:pre-request {
   baseUrl: https://goliveira.site
   apiPath: /api
-  searchTerm: Rick
+  searchTerm: Bruno
 }
 
 assert {
   res.status: 200
   res.body: isArray
-  res.body:jsonpath "$[0].Category": isString
+  res.body: jsonpath "$[0].Category": isString
 }
