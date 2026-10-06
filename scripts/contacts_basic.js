@@ -64,10 +64,10 @@ function ToggleDarkMode() {
 }
 
 document.getElementById('logout-button').addEventListener('click', async () => {
-        try {
-            await fetch('api/index.php?logout=1', { method: 'POST' });
-        } finally {
-            sessionStorage.clear();
-            window.location.assign('index.html');
-        }
-    });
+    try {
+        await fetch('api/index.php?logout=1', { method: 'POST' });
+    } finally {
+        sessionStorage.clear();
+        window.location.assign('index.html');
+    }
+});

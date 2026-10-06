@@ -9,8 +9,9 @@
     <link rel="stylesheet" href="style/basic_style.css">
     <link rel="stylesheet" href="style/widgets.css">
     <link rel="stylesheet" href="style/contacts.css">
+    <meta name="description" content="A contacts page for brown book">
 </head>
-
+<main>
 <body>
     <div id="header-bar">
         <div id="logo">
@@ -21,7 +22,7 @@
         <div id="header-bar-right">
             <div id="dark-mode-toggle">
                 <input type="checkbox" id="dark-mode-toggle-button">
-                <label>Toggle Dark Mode</label>
+                <label for="dark-mode-toggle-button">Toggle Dark Mode</label>
             </div>
             <h1 id="header-name">Hello, <span id="user-name">Placeholder</span>!</h1>
             <button id="logout-button" type="button">Log out</button>
@@ -140,7 +141,7 @@
             <label class="widget-label">Note</label>
         </div>
     </footer>
-
+</main>
     <script src="scripts/contacts_handler.js" defer></script>
     <script src="scripts/contacts_basic.js" defer></script>
 </body>
